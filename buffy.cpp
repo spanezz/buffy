@@ -4,10 +4,12 @@
 Buffy::Buffy(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Buffy),
-    folders_model(folders)
+    folders_model(folders),
+    sorterfilter(folders)
 {
     ui->setupUi(this);
-    ui->folders->setModel(&folders_model);
+    sorterfilter.setSourceModel(&folders_model);
+    ui->folders->setModel(&sorterfilter);
     ui->folders->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
     folders_model.reread_folders();

@@ -112,6 +112,7 @@ MailFolder FolderModel::valueAt(const QModelIndex &index) const
     return visible_folders[index.row()];
 }
 
+/*
 typedef std::function<bool(const MailFolder& a, const MailFolder& b)> sort_func;
 
 static sort_func get_sort_function(FolderModel::ColumnType ct, Qt::SortOrder order)
@@ -148,6 +149,7 @@ void FolderModel::sort(int column, Qt::SortOrder order)
     std::sort(visible_folders.begin(), visible_folders.end(), get_sort_function(resolveColumnType(column), order));
     reset();
 }
+*/
 
 void FolderModel::reread_folders()
 {

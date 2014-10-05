@@ -17,10 +17,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         buffy.cpp \
     foldermodel.cpp \
-    folders.cpp
+    folders.cpp \
+    sorterfilter.cpp
 
 HEADERS  += buffy.h \
     foldermodel.h \
-    folders.h
+    folders.h \
+    sorterfilter.h
 
 FORMS    += buffy.ui

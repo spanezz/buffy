@@ -42,7 +42,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     Qt::ItemFlags flags(const QModelIndex& index) const;
     buffy::MailFolder valueAt(const QModelIndex& index) const;
-    void sort(int column, Qt::SortOrder order) override;
+    //void sort(int column, Qt::SortOrder order) override;
 
 signals:
 

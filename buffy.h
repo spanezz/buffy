@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "folders.h"
 #include "foldermodel.h"
+#include "sorterfilter.h"
 
 namespace Ui {
 class Buffy;
@@ -16,6 +17,7 @@ class Buffy : public QMainWindow
 public:
     Folders folders;
     FolderModel folders_model;
+    SorterFilter sorterfilter;
 
     explicit Buffy(QWidget *parent = 0);
     ~Buffy();
