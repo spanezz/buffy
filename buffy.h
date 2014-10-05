@@ -1,0 +1,30 @@
+#ifndef BUFFY_H
+#define BUFFY_H
+
+#include <QMainWindow>
+#include "folders.h"
+#include "foldermodel.h"
+
+namespace Ui {
+class Buffy;
+}
+
+class Buffy : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    Folders folders;
+    FolderModel folders_model;
+
+    explicit Buffy(QWidget *parent = 0);
+    ~Buffy();
+
+private slots:
+    void on_action_Quit_triggered();
+
+private:
+    Ui::Buffy *ui;
+};
+
+#endif // BUFFY_H
