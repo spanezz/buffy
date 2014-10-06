@@ -24,6 +24,8 @@ public:
 
 private slots:
     void do_quit();
+    void save_config();
+    void sort_changed(int logicalIndex, Qt::SortOrder order);
 
 private:
     Ui::Buffy *ui;
