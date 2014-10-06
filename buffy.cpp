@@ -12,6 +12,9 @@ Buffy::Buffy(QWidget *parent) :
     ui->folders->setModel(&sorterfilter);
     ui->folders->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
+    connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
+    connect(ui->action_refresh, SIGNAL(triggered()), &sorterfilter, SLOT(refresh()));
+
     folders_model.reread_folders();
 }
 
@@ -20,7 +23,7 @@ Buffy::~Buffy()
     delete ui;
 }
 
-void Buffy::on_action_Quit_triggered()
+void Buffy::do_quit()
 {
     close();
 }

@@ -5,23 +5,12 @@
 #include <buffy/mailfolder.h>
 #include "folders.h"
 
-struct Folder
-{
-    buffy::MailFolder folder;
-    bool always_show;
-    bool always_hide;
-
-    bool is_visible(bool view_all, bool view_all_nonempty, bool view_all_flagged) const;
-};;
-
 class FolderModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 protected:
     Folders& folders;
-    std::vector<Folder> all_folders;
-    std::vector<buffy::MailFolder> visible_folders;
 
 public:
     enum ColumnType {
@@ -41,14 +30,12 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     Qt::ItemFlags flags(const QModelIndex& index) const;
-    buffy::MailFolder valueAt(const QModelIndex& index) const;
-    //void sort(int column, Qt::SortOrder order) override;
+    const Folder* valueAt(const QModelIndex& index) const;
 
 signals:
 
 public slots:
     void reread_folders();
-    void update_folders();
 };
 
 #endif // RAWQUERYMODEL_H

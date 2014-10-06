@@ -73,7 +73,9 @@
     <property name="title">
      <string>Buffy</string>
     </property>
-    <addaction name="action_Quit"/>
+    <addaction name="action_refresh"/>
+    <addaction name="action_rescan"/>
+    <addaction name="action_quit"/>
    </widget>
    <addaction name="menuBuffy"/>
   </widget>
@@ -86,7 +88,7 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_Quit">
+  <action name="action_quit">
    <property name="text">
     <string>&amp;Quit</string>
    </property>
@@ -95,6 +97,25 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_refresh">
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh folder statistics</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="action_rescan">
+   <property name="text">
+    <string>Rescan</string>
+   </property>
+   <property name="toolTip">
+    <string>Reread folder list</string>
    </property>
   </action>
  </widget>

@@ -5,14 +5,31 @@
 #include <buffy/mailfolder.h>
 #include <functional>
 
-class Folders
+struct Folder
 {
+    buffy::MailFolder folder;
+    bool always_show;
+    bool always_hide;
+
+    bool is_visible(bool view_all, bool view_all_nonempty, bool view_all_flagged) const;
+};
+
+class Folders: public buffy::Consumer<buffy::MailFolder>
+{
+protected:
+    void consume(buffy::MailFolder& folder) override;
+
 public:
     buffy::config::Config config;
+    std::vector<Folder> all;
 
     Folders();
 
-    void find_folders(std::function<void(buffy::MailFolder)> func);
+    /// Look for folders on disk
+    void rescan();
+
+    /// Update folder statistics
+    void refresh();
 };
 
 #endif // FOLDERS_H

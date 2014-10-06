@@ -23,7 +23,7 @@ public:
     ~Buffy();
 
 private slots:
-    void on_action_Quit_triggered();
+    void do_quit();
 
 private:
     Ui::Buffy *ui;
