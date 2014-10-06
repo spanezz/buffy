@@ -76,6 +76,10 @@ QVariant FolderModel::data(const QModelIndex &index, int role) const
         }
         break;
     }
+    /*
+    case Qt::SizeHintRole:
+        break;
+        */
     return QVariant();
 }
 
@@ -90,10 +94,10 @@ QVariant FolderModel::headerData(int section, Qt::Orientation orientation, int r
     switch (resolveColumnType(section))
     {
     case CT_NAME: return QVariant("Name");
-    case CT_NEW: return QVariant("N");
-    case CT_UNREAD: return QVariant("U");
-    case CT_TOTAL: return QVariant("T");
-    case CT_FLAGGED: return QVariant("F");
+    case CT_NEW: return QVariant("New");
+    case CT_UNREAD: return QVariant("Unread");
+    case CT_TOTAL: return QVariant("Total");
+    case CT_FLAGGED: return QVariant("Flagged");
     default: return QVariant();
     }
 }

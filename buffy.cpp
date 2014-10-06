@@ -10,12 +10,18 @@ Buffy::Buffy(QWidget *parent) :
     folders_model(folders),
     sorterfilter(folders)
 {
+    //setStyleSheet("QHeaderView::section:horizontal {margin-left: 0; margin-right:0;}");
+    //setStyleSheet("QHeaderView::section:horizontal {margin-right: 0;}");
+    //setStyleSheet("QHeaderView::section:horizontal {margin-left:0; margin-right:0; margin-top:1px margin-bottom:1px}");
+    setStyleSheet("QHeaderView::section:horizontal {margin-top: 3px; margin-bottom: 3px; margin-left: 0; margin-right: 0; }");
+
     ui->setupUi(this);
     sorterfilter.setSourceModel(&folders_model);
     sorterfilter.setDynamicSortFilter(true);
     ui->folders->setModel(&sorterfilter);
     auto header = ui->folders->horizontalHeader();
     header->setResizeMode(QHeaderView::ResizeToContents);
+    header->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
     connect(ui->action_refresh, SIGNAL(triggered()), &sorterfilter, SLOT(refresh()));
