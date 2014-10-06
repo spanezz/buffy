@@ -22,6 +22,7 @@ Buffy::Buffy(QWidget *parent) :
     auto header = ui->folders->horizontalHeader();
     header->setResizeMode(QHeaderView::ResizeToContents);
     header->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->folders->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
     connect(ui->action_refresh, SIGNAL(triggered()), &sorterfilter, SLOT(refresh()));
