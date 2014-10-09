@@ -27,6 +27,7 @@ Buffy::Buffy(QWidget *parent) :
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
     connect(ui->action_refresh, SIGNAL(triggered()), &sorterfilter, SLOT(refresh()));
     connect(header, SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(sort_changed(int,Qt::SortOrder)));
+    connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
 
     folders_model.reread_folders();
 
@@ -64,3 +65,15 @@ void Buffy::sort_changed(int logicalIndex, Qt::SortOrder order)
     prefs.setInt("sort_col_id", logicalIndex + 1);
     prefs.setInt("sort_order", order == Qt::AscendingOrder ? 0 : 1);
 }
+
+void Buffy::folder_activated(const QModelIndex &idx)
+{
+    QModelIndex source_idx = sorterfilter.mapToSource(idx);
+    config::MailProgram m = folders.config.selectedMailProgram();
+    const Folder* f = folders_model.valueAt(source_idx);
+    if (!f) return;
+    qDebug() << "Running " << m.command("gui").c_str();
+    m.run(f->folder, "gui");
+}
+
+

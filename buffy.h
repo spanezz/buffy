@@ -26,6 +26,7 @@ private slots:
     void do_quit();
     void save_config();
     void sort_changed(int logicalIndex, Qt::SortOrder order);
+    void folder_activated(const QModelIndex&);
 
 private:
     Ui::Buffy *ui;
