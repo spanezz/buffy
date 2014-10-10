@@ -1,5 +1,6 @@
 #include "foldermodel.h"
 #include <algorithm>
+#include <QColor>
 #include <QDebug>
 
 using namespace buffy;
@@ -72,6 +73,13 @@ QVariant FolderModel::data(const QModelIndex &index, int role) const
         case CT_UNREAD:
         case CT_TOTAL:
         case CT_FLAGGED: return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+        default: return QVariant();
+        }
+        break;
+    case Qt::BackgroundRole:
+        switch (ctype)
+        {
+        case CT_NAME: return QColor(0xEEEEEE);
         default: return QVariant();
         }
         break;
