@@ -20,10 +20,10 @@ protected:
 
     bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
-    void update_visibility(bool refilter=true);
-
 public:
     explicit SorterFilter(Folders& folders, QObject *parent = 0);
+
+    void update_visibility(bool refilter=true);
 
 signals:
 

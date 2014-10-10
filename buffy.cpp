@@ -30,6 +30,10 @@ Buffy::Buffy(QWidget *parent) :
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
     connect(ui->action_refresh, SIGNAL(triggered()), this, SLOT(do_refresh()));
     connect(ui->action_rescan, SIGNAL(triggered()), this, SLOT(do_rescan()));
+    connect(ui->action_view_all, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
+    connect(ui->action_view_all_nonempty, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
+    connect(ui->action_view_all_flagged, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
+
     connect(header, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sort_changed(int, Qt::SortOrder)));
     connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
     connect(&update_timer, SIGNAL(timeout()), this, SLOT(do_refresh()));
@@ -45,6 +49,10 @@ Buffy::Buffy(QWidget *parent) :
         //sorterfilter.sort(col, order);
         header->setSortIndicator(col, order);
     }
+
+    ui->action_view_all->setChecked(folders.config.view().empty());
+    ui->action_view_all_nonempty->setChecked(folders.config.view().read());
+    ui->action_view_all_flagged->setChecked(folders.config.view().important());
 
     QSize default_size = size();
     prefs.addDefault("winw", QString::number(default_size.width()).toStdString());
@@ -90,12 +98,20 @@ void Buffy::do_quit()
 void Buffy::do_rescan()
 {
     folders.rescan();
-    sorterfilter.invalidate();
+    sorterfilter.update_visibility();
 }
 
 void Buffy::do_refresh()
 {
     folders_model.reread_folders();
+}
+
+void Buffy::do_visibility_change()
+{
+    folders.config.view().setEmpty(ui->action_view_all->isChecked());
+    folders.config.view().setRead(ui->action_view_all_nonempty->isChecked());
+    folders.config.view().setImportant(ui->action_view_all_flagged->isChecked());
+    sorterfilter.update_visibility();
 }
 
 void Buffy::save_config()
