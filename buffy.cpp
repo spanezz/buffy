@@ -8,10 +8,10 @@ using namespace buffy;
 
 Buffy::Buffy(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::Buffy),
     update_timer(this),
     folders_model(folders),
-    sorterfilter(folders)
+    sorterfilter(folders),
+    ui(new Ui::Buffy)
 {
     //setStyleSheet("QHeaderView::section:horizontal {margin-left: 0; margin-right:0;}");
     //setStyleSheet("QHeaderView::section:horizontal {margin-right: 0;}");
