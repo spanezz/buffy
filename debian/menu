@@ -1,0 +1,6 @@
+?package(buffy): \
+  needs="X11" \
+  section="Applications/Network/Communication" \
+  hints="Mail" \
+  title="buffy" \
+  command="/usr/bin/buffy"

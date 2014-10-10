@@ -1,0 +1,197 @@
+buffy (1.5-2) unstable; urgency=low
+
+  * Updated libwibble dependency.
+
+ -- Enrico Zini <enrico@debian.org>  Fri, 25 Oct 2013 19:27:24 +0200
+
+buffy (1.5-1) unstable; urgency=low
+
+  [ Cyril Brulebois ]
+  * Fix FTBFS with gcc 4.7 by fixing missing <unistd.h> includes
+    (Closes: #667124).
+
+  [ Enrico Zini ]
+  * New upstream version with gcc 4.7 patches from Cyril Brulebois.
+  * Migrated to dh.
+  * Cleaned up uploaders.
+  * Updated standards-version, no changes required.
+
+ -- Enrico Zini <enrico@debian.org>  Mon, 16 Apr 2012 23:35:00 +0200
+
+buffy (1.4-1) unstable; urgency=low
+
+  * New upstream version
+     + Compiles with newer GCC. Closes: #629882
+  * Depends on libbuffy 1.6 so we can deal with empty config files
+
+ -- Enrico Zini <enrico@debian.org>  Sat, 30 Jul 2011 03:13:22 +0200
+
+buffy (1.3-1) unstable; urgency=low
+
+  * New upstream version
+     + Changed manpage creation to work with wibble's stricter command line
+       option checking. Closes: #614532
+  * Updated standards-version, no changes required
+
+ -- Enrico Zini <enrico@debian.org>  Wed, 23 Mar 2011 14:53:02 +0000
+
+buffy (1.2.1-1) unstable; urgency=low
+
+  * New upstream version
+     + Run the "gui" version of mail commands, instead of the default "text"
+       version
+
+ -- Enrico Zini <enrico@debian.org>  Fri, 05 Mar 2010 17:06:24 +0000
+
+buffy (1.2-1) unstable; urgency=low
+
+  * New upstream version
+     + Ported to libbuffy 1.4
+     + Ported to sigc++ 2.0. Closes: #569407
+
+ -- Enrico Zini <enrico@debian.org>  Fri, 05 Mar 2010 16:33:11 +0000
+
+buffy (1.1) unstable; urgency=low
+
+  * New upstream version
+     + Do not install the headers.  Closes: #473093
+
+ -- Enrico Zini <enrico@debian.org>  Sun, 06 Jul 2008 19:24:52 +0200
+
+buffy (1.0-1) unstable; urgency=low
+
+  * New upstream version
+     + Fixed command line parser.  Closes: #433967 
+  * Updated Standards-Version
+     + Updated menu entry
+
+ -- Enrico Zini <enrico@debian.org>  Sat, 22 Mar 2008 17:09:11 +0800
+
+buffy (0.11.3-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix FTBFS with GCC 4.3 (Closes: #417126).
+
+ -- Luk Claes <luk@debian.org>  Sat, 08 Mar 2008 21:53:25 +0000
+
+buffy (0.11.3-1) unstable; urgency=low
+
+  * New upstram version
+     + Builds with new libbuffy-dev
+  * Set myself as the maintainer
+
+ -- Enrico Zini <enrico@debian.org>  Fri, 25 Aug 2006 14:16:53 +0100
+
+buffy (0.11.2-1) unstable; urgency=medium
+
+  * New minor upstream release.
+  * Depends on libbuffy 0.8.1.  Closes: #373259, #353904.
+  * Section changed to 'mail'.  Closes: #369682.
+  * There is a very small change to the format of ~/.buffy, but libbuffy can
+    upgrade the file automatically.
+  * Urgency set to medium because of #373259.
+
+ -- Enrico Zini <enrico@debian.org>  Fri, 23 Jun 2006 16:28:57 +0100
+
+buffy (0.11.1-1) unstable; urgency=low
+
+  [ martin f. krafft ]
+  * New upstream release (closes: #372471).
+  * The amd64 crash is no longer reproducible (closes: #353841).
+  * Pushed Standards-Version to 3.7.2; no changes needed.
+
+  [ Enrico Zini ]
+  * Depend on the new libbuffy-dev
+
+ -- Enrico Zini <enrico@debian.org>  Mon, 12 Jun 2006 14:21:03 +0200
+
+buffy (0.11-1) unstable; urgency=low
+
+  * New upstream version.  Closes: #327228.
+
+ -- Enrico Zini <enrico@debian.org>  Thu,  6 Oct 2005 18:47:50 +0200
+
+buffy (0.10-1) unstable; urgency=low
+
+  * New upstram version
+  * Clean entry in debian/docs
+
+ -- Maurizio Lemmo (Tannoiser) <tannoiser@tenzione.it>  Wed, 31 Aug 2005 15:58:05 +0200
+
+buffy (0.9-1) unstable; urgency=low
+
+  * New upstream version
+  * Updated docs file after upstream removed the NEWS file.
+  * Build-dep on new libbuffy.
+  * Bump standards-version to 3.6.2.0.
+
+ -- Maurizio Lemmo (Tannoiser) <tannoiser@tenzione.it>  Fri, 26 Aug 2005 12:52:44 +0200
+
+buffy (0.8-1) unstable; urgency=low
+
+  * New upstream version
+    - gcc4 migration
+  * Removed ${misc:Depends}.
+
+ -- Maurizio Lemmo (Tannoiser) <tannoiser@tenzione.it>  Sat,  6 Aug 2005 17:04:51 +0200
+
+buffy (0.7-1) unstable; urgency=low
+
+  * New upstream version
+    Ported to libbuffy 0.4.  Closes: #271187.
+    Now remembers window geometry between invocations.
+    Added support for gzip-compressed mbox files.
+
+ -- Enrico Zini <enrico@debian.org>  Mon,  9 May 2005 19:58:03 +0200
+
+buffy (0.6-1) unstable; urgency=low
+
+  * New upstream version
+    Now builds on libbuffy
+  * Includes the menu file.  Closes: #269400.
+    Thanks to Martin F. Krafft.
+  * Fixed and insert Uploaders field, in debian/control, with the
+    co-maintainer Enrico and Madduck.
+
+ -- Enrico Zini <enrico@debian.org>  Sat, 26 Feb 2005 14:42:35 +0100
+
+buffy (0.5-2) unstable; urgency=low
+
+  * Rebuilt with the correct maintainer field
+
+ -- Enrico Zini <enrico@debian.org>  Sun, 31 Oct 2004 14:50:26 -0300
+
+buffy (0.5-1) unstable; urgency=low
+
+  * New upstream version
+    Added support for mailbox format.
+  * Enrico applied a patch from Andreas Jochens to compile with gcc 3.4
+    (Closes: #268856)
+
+ -- Maurizio Lemmo (Tannoiser) <tannoiser@tenzione.it>  Sun, 31 Oct 2004 17:19:15 +0100
+
+buffy (0.4-1) unstable; urgency=low
+
+  * New upstream version
+  * New Maintainer
+
+ -- Maurizio Lemmo (Tannoiser) <tannoiser@tenzione.it>  Wed, 22 Sep 2004 17:47:29 +0200
+
+buffy (0.3-1) unstable; urgency=low
+
+  * New upstream version
+
+ -- Enrico Zini <enrico@debian.org>  Mon, 23 Aug 2004 00:10:43 +0200
+
+buffy (0.2-1) unstable; urgency=low
+
+  * New upstream version
+
+ -- Enrico Zini <enrico@debian.org>  Thu, 19 Aug 2004 23:43:35 +0200
+
+buffy (0.1-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Enrico Zini <enrico@debian.org>  Wed, 18 Aug 2004 16:21:33 +0200
+
