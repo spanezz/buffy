@@ -33,12 +33,29 @@ Buffy::Buffy(QWidget *parent) :
     connect(ui->action_view_all, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
     connect(ui->action_view_all_nonempty, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
     connect(ui->action_view_all_flagged, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
+    connect(ui->action_column_new, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
+    connect(ui->action_column_unread, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
+    connect(ui->action_column_total, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
+    connect(ui->action_column_flagged, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
 
     connect(header, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sort_changed(int, Qt::SortOrder)));
     connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
     connect(&update_timer, SIGNAL(timeout()), this, SLOT(do_refresh()));
 
     folders_model.reread_folders();
+
+    config::View view = folders.config.view();
+    view.addDefault("col_new", "true");
+    view.addDefault("col_unread", "true");
+    view.addDefault("col_total", "true");
+    view.addDefault("col_flagged", "true");
+
+    ui->action_column_new->setChecked(view.getBool("col_new"));
+    ui->action_column_unread->setChecked(view.getBool("col_unread"));
+    ui->action_column_total->setChecked(view.getBool("col_total"));
+    ui->action_column_flagged->setChecked(view.getBool("col_flagged"));
+
+    update_column_visibility();
 
     config::Section prefs(folders.config.application("buffy"));
     if (prefs.getBool("sorted"))
@@ -112,6 +129,28 @@ void Buffy::do_visibility_change()
     folders.config.view().setRead(ui->action_view_all_nonempty->isChecked());
     folders.config.view().setImportant(ui->action_view_all_flagged->isChecked());
     sorterfilter.update_visibility();
+}
+
+void Buffy::update_column_visibility()
+{
+    config::View view = folders.config.view();
+
+    ui->folders->setColumnHidden(1, !view.getBool("col_new"));
+    ui->folders->setColumnHidden(2, !view.getBool("col_unread"));
+    ui->folders->setColumnHidden(3, !view.getBool("col_total"));
+    ui->folders->setColumnHidden(4, !view.getBool("col_flagged"));
+}
+
+void Buffy::do_column_visibility_change()
+{
+    config::View view = folders.config.view();
+
+    view.setBool("col_new", ui->action_column_new->isChecked());
+    view.setBool("col_unread", ui->action_column_unread->isChecked());
+    view.setBool("col_total", ui->action_column_total->isChecked());
+    view.setBool("col_flagged", ui->action_column_flagged->isChecked());
+
+    update_column_visibility();
 }
 
 void Buffy::save_config()

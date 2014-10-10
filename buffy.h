@@ -18,6 +18,7 @@ class Buffy : public QMainWindow
 protected:
     void resizeEvent(QResizeEvent* event) override;
     void moveEvent(QMoveEvent* event) override;
+    void update_column_visibility();
 
 public:
     QTimer update_timer;
@@ -33,6 +34,7 @@ private slots:
     void do_rescan();
     void do_refresh();
     void do_visibility_change();
+    void do_column_visibility_change();
     void save_config();
     void sort_changed(int logicalIndex, Qt::SortOrder order);
     void folder_activated(const QModelIndex&);

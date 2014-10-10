@@ -90,6 +90,11 @@
     <addaction name="action_view_all"/>
     <addaction name="action_view_all_nonempty"/>
     <addaction name="action_view_all_flagged"/>
+    <addaction name="separator"/>
+    <addaction name="action_column_new"/>
+    <addaction name="action_column_unread"/>
+    <addaction name="action_column_total"/>
+    <addaction name="action_column_flagged"/>
    </widget>
    <addaction name="menuBuffy"/>
    <addaction name="menuView"/>
@@ -150,6 +155,38 @@
    </property>
    <property name="text">
     <string>View all nonempty folders</string>
+   </property>
+  </action>
+  <action name="action_column_new">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="action_column_unread">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Unread</string>
+   </property>
+  </action>
+  <action name="action_column_total">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Total</string>
+   </property>
+  </action>
+  <action name="action_column_flagged">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Flagged</string>
    </property>
   </action>
  </widget>
