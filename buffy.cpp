@@ -1,6 +1,8 @@
 #include "buffy.h"
 #include "ui_buffy.h"
 #include <QDebug>
+#include <QResizeEvent>
+#include <QMoveEvent>
 
 using namespace buffy;
 
@@ -47,9 +49,15 @@ Buffy::Buffy(QWidget *parent) :
     QSize default_size = size();
     prefs.addDefault("winw", QString::number(default_size.width()).toStdString());
     prefs.addDefault("winh", QString::number(default_size.height()).toStdString());
-    int saved_w = prefs.getInt("winw");
-    int saved_h = prefs.getInt("winh");
-    resize(QSize(saved_w, saved_h));
+
+    if (prefs.isSet("winx") && prefs.isSet("winy"))
+    {
+        setGeometry(prefs.getInt("winx"), prefs.getInt("winy"), prefs.getInt("winw"), prefs.getInt("winh"));
+    } else {
+        int saved_w = prefs.getInt("winw");
+        int saved_h = prefs.getInt("winh");
+        resize(QSize(saved_w, saved_h));
+    }
 }
 
 Buffy::~Buffy()
@@ -60,10 +68,17 @@ Buffy::~Buffy()
 void Buffy::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
-    QSize new_size = size();
     config::Section prefs(folders.config.application("buffy"));
-    prefs.setInt("winw", new_size.width());
-    prefs.setInt("winh", new_size.height());
+    prefs.setInt("winw", event->size().width());
+    prefs.setInt("winh", event->size().height());
+}
+
+void Buffy::moveEvent(QMoveEvent *event)
+{
+    QMainWindow::moveEvent(event);
+    config::Section prefs(folders.config.application("buffy"));
+    prefs.setInt("winx", event->pos().x());
+    prefs.setInt("winy", event->pos().y());
 }
 
 void Buffy::do_quit()

@@ -17,6 +17,7 @@ class Buffy : public QMainWindow
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
+    void moveEvent(QMoveEvent* event) override;
 
 public:
     QTimer update_timer;
