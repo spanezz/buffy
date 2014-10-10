@@ -28,7 +28,7 @@ public:
 signals:
 
 public slots:
-    void refresh();
+
 };
 
 #endif // SORTERFILTER_H

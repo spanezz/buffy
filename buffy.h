@@ -24,6 +24,8 @@ public:
 
 private slots:
     void do_quit();
+    void do_rescan();
+    void do_refresh();
     void save_config();
     void sort_changed(int logicalIndex, Qt::SortOrder order);
     void folder_activated(const QModelIndex&);

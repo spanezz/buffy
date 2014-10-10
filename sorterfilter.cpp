@@ -7,12 +7,6 @@ SorterFilter::SorterFilter(Folders& folders, QObject *parent) :
     update_visibility();
 }
 
-void SorterFilter::refresh()
-{
-    folders.refresh();
-    invalidate();
-}
-
 bool SorterFilter::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     FolderModel* model = dynamic_cast<FolderModel*>(sourceModel());

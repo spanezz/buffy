@@ -25,8 +25,9 @@ Buffy::Buffy(QWidget *parent) :
     ui->folders->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
-    connect(ui->action_refresh, SIGNAL(triggered()), &sorterfilter, SLOT(refresh()));
-    connect(header, SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(sort_changed(int,Qt::SortOrder)));
+    connect(ui->action_refresh, SIGNAL(triggered()), this, SLOT(do_refresh()));
+    connect(ui->action_rescan, SIGNAL(triggered()), this, SLOT(do_rescan()));
+    connect(header, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sort_changed(int, Qt::SortOrder)));
     connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
 
     folders_model.reread_folders();
@@ -51,6 +52,17 @@ void Buffy::do_quit()
 {
     save_config();
     close();
+}
+
+void Buffy::do_rescan()
+{
+    folders.rescan();
+    sorterfilter.invalidate();
+}
+
+void Buffy::do_refresh()
+{
+    folders_model.reread_folders();
 }
 
 void Buffy::save_config()
