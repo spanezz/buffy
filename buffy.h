@@ -2,6 +2,7 @@
 #define BUFFY_H
 
 #include <QMainWindow>
+#include <QTimer>
 #include "folders.h"
 #include "foldermodel.h"
 #include "sorterfilter.h"
@@ -15,6 +16,7 @@ class Buffy : public QMainWindow
     Q_OBJECT
 
 public:
+    QTimer update_timer;
     Folders folders;
     FolderModel folders_model;
     SorterFilter sorterfilter;
