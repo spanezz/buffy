@@ -15,6 +15,9 @@ class Buffy : public QMainWindow
 {
     Q_OBJECT
 
+protected:
+    void resizeEvent(QResizeEvent* event) override;
+
 public:
     QTimer update_timer;
     Folders folders;

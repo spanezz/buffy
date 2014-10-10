@@ -43,11 +43,27 @@ Buffy::Buffy(QWidget *parent) :
         //sorterfilter.sort(col, order);
         header->setSortIndicator(col, order);
     }
+
+    QSize default_size = size();
+    prefs.addDefault("winw", QString::number(default_size.width()).toStdString());
+    prefs.addDefault("winh", QString::number(default_size.height()).toStdString());
+    int saved_w = prefs.getInt("winw");
+    int saved_h = prefs.getInt("winh");
+    resize(QSize(saved_w, saved_h));
 }
 
 Buffy::~Buffy()
 {
     delete ui;
+}
+
+void Buffy::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    QSize new_size = size();
+    config::Section prefs(folders.config.application("buffy"));
+    prefs.setInt("winw", new_size.width());
+    prefs.setInt("winh", new_size.height());
 }
 
 void Buffy::do_quit()
