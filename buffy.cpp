@@ -217,11 +217,9 @@ void Buffy::sort_changed(int logicalIndex, Qt::SortOrder order)
 void Buffy::folder_activated(const QModelIndex &idx)
 {
     QModelIndex source_idx = sorterfilter.mapToSource(idx);
-    config::MailProgram m = folders.config.selectedMailProgram();
     const Folder* f = folders_model.valueAt(source_idx);
     if (!f) return;
-    qDebug() << "Running " << m.command("gui").c_str();
-    m.run(f->folder, "gui");
+    folders.run_email_program(f->folder);
 }
 
 void Buffy::tray_activated(QSystemTrayIcon::ActivationReason reason)
@@ -231,12 +229,22 @@ void Buffy::tray_activated(QSystemTrayIcon::ActivationReason reason)
         //QSystemTrayIcon::Unknown	0	Unknown reason
         case QSystemTrayIcon::Context:
         {
-            //The context menu for the system tray entry was requested
-          /*  QMenu menu(this);
-            menu.exec(tray.geometry().topLeft());*/
+            // The context menu for the system tray entry was requested
+            tray_menu.clear();
+            bool has_inboxes = false;
+            for (auto f: folders.all)
+            {
+                if (!f.cfg.getBool("activeinbox")) continue;
+                tray_menu.addAction(new ActivateInboxAction(folders, f.folder, &tray_menu));
+                has_inboxes = true;
+            }
+            if (has_inboxes)
+                tray_menu.addSeparator();
+            tray_menu.addAction(ui->action_quit);
             break;
         }
-        //QSystemTrayIcon::DoubleClick	2	The system tray entry was double clicked
+        case QSystemTrayIcon::MiddleClick:
+        case QSystemTrayIcon::DoubleClick:
         case QSystemTrayIcon::Trigger:
         {
             config::Section prefs(folders.config.application("buffy"));
@@ -252,8 +260,19 @@ void Buffy::tray_activated(QSystemTrayIcon::ActivationReason reason)
             }
             break;
         }
-        //QSystemTrayIcon::MiddleClick	4
     }
 }
 
+ActivateInboxAction::ActivateInboxAction(Folders &folders, buffy::MailFolder folder, QObject *parent)
+    : QAction(parent), folders(folders), folder(folder)
+{
+    connect(this, SIGNAL(triggered()), this, SLOT(on_trigger()));
+    QString name(QString::fromStdString(folder.name()));
+    name += QString(" (%1 new)").arg(folder.getMsgNew());
+    setText(name);
+}
 
+void ActivateInboxAction::on_trigger()
+{
+    folders.run_email_program(folder);
+}

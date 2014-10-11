@@ -4,6 +4,7 @@
 #include <buffy/config/config.h>
 #include <buffy/mailfolder.h>
 #include <functional>
+#include <QObject>
 
 struct Folder
 {
@@ -13,22 +14,25 @@ struct Folder
     bool is_visible(bool view_all, bool view_all_nonempty, bool view_all_flagged) const;
 };
 
-class Folders: public buffy::Consumer<buffy::MailFolder>
+class Folders: public QObject
 {
-protected:
-    void consume(buffy::MailFolder& folder) override;
+    Q_OBJECT
 
 public:
     buffy::config::Config config;
     std::vector<Folder> all;
 
-    Folders();
+    Folders(QObject* parent=0);
+    ~Folders();
 
     /// Look for folders on disk
     void rescan();
 
     /// Update folder statistics
     void refresh();
+
+public slots:
+    void run_email_program(buffy::MailFolder folder);
 };
 
 #endif // FOLDERS_H

@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QAction>
 #include "folders.h"
 #include "foldermodel.h"
 #include "sorterfilter.h"
@@ -52,6 +53,20 @@ private slots:
 
 private:
     Ui::Buffy *ui;
+};
+
+class ActivateInboxAction: public QAction
+{
+    Q_OBJECT
+
+public:
+    Folders& folders;
+    buffy::MailFolder folder;
+
+    ActivateInboxAction(Folders& folders, buffy::MailFolder folder, QObject* parent);
+
+protected slots:
+    void on_trigger();
 };
 
 #endif // BUFFY_H

@@ -1,29 +1,44 @@
 #include "folders.h"
+#include <QDebug>
 
 using namespace buffy;
 
-Folders::Folders()
+Folders::Folders(QObject* parent)
+    : QObject(parent)
 {
 }
 
-void Folders::consume(MailFolder &folder)
+Folders::~Folders()
 {
-    if (folder.changed()) folder.updateStatistics();
-    config::Folder fc = config.folder(folder);
-    all.emplace_back(Folder{ folder, fc });
 }
 
 void Folders::rescan()
 {
     all.clear();
+
     for (auto loc: config.locations())
-        MailFolder::enumerateFolders(loc, *this);
+    {
+        auto folders = MailFolder::enumerateFolders(loc);
+        for (auto folder: folders)
+        {
+            if (folder.changed()) folder.updateStatistics();
+            config::Folder fc = config.folder(folder);
+            all.emplace_back(Folder{ folder, fc });
+        }
+    }
 }
 
 void Folders::refresh()
 {
     for (auto f: all)
         if (f.folder.changed()) f.folder.updateStatistics();
+}
+
+void Folders::run_email_program(MailFolder folder)
+{
+    config::MailProgram m = config.selectedMailProgram();
+    qDebug() << "Running " << m.command("gui").c_str();
+    m.run(folder, "gui");
 }
 
 bool Folder::is_visible(bool view_all, bool view_all_nonempty, bool view_all_flagged) const
