@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui dbus
 CONFIG += link_pkgconfig
 QMAKE_CXXFLAGS += -std=c++11
 PKGCONFIG += libbuffy
@@ -20,14 +20,16 @@ SOURCES += main.cpp\
     folders.cpp \
     sorterfilter.cpp \
     folderview.cpp \
-    preferences.cpp
+    preferences.cpp \
+    dbus.cpp
 
 HEADERS  += buffy.h \
     foldermodel.h \
     folders.h \
     sorterfilter.h \
     folderview.h \
-    preferences.h
+    preferences.h \
+    dbus.h
 
 FORMS    += buffy.ui \
     preferences.ui

@@ -140,6 +140,14 @@ void Buffy::do_hide()
     hide();
 }
 
+void Buffy::do_show()
+{
+    config::Section prefs(folders.config.application("buffy"));
+    show();
+    activateWindow();
+    prefs.setBool("hidden", false);
+}
+
 void Buffy::do_rescan()
 {
     folders.rescan();
@@ -265,11 +273,9 @@ void Buffy::tray_activated(QSystemTrayIcon::ActivationReason reason)
             // The system tray entry was clicked
             if (isVisible())
             {
-                hide();
-                prefs.setBool("hidden", true);
+                do_hide();
             } else {
-                show();
-                prefs.setBool("hidden", false);
+                do_show();
             }
             break;
         }

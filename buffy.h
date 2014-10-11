@@ -38,11 +38,14 @@ public:
     explicit Buffy(QApplication& app, Folders& folders, QWidget *parent = 0);
     ~Buffy();
 
-private slots:
-    void do_quit();
+public slots:
     void do_hide();
+    void do_show();
     void do_rescan();
     void do_refresh();
+
+private slots:
+    void do_quit();
     void do_visibility_change();
     void do_column_visibility_change();
     void do_preferences();
