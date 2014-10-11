@@ -19,12 +19,15 @@ SOURCES += main.cpp\
     foldermodel.cpp \
     folders.cpp \
     sorterfilter.cpp \
-    folderview.cpp
+    folderview.cpp \
+    preferences.cpp
 
 HEADERS  += buffy.h \
     foldermodel.h \
     folders.h \
     sorterfilter.h \
-    folderview.h
+    folderview.h \
+    preferences.h
 
-FORMS    += buffy.ui
+FORMS    += buffy.ui \
+    preferences.ui

@@ -58,6 +58,27 @@ public slots:
     }
 };
 
+struct ActiveInboxAction : public FolderAction
+{
+    Q_OBJECT
+
+public:
+    ActiveInboxAction(buffy::config::Folder& foldercfg, QObject *parent)
+        : FolderAction(foldercfg, parent)
+    {
+        foldercfg.addDefault("activeinbox", "false");
+        setChecked(foldercfg.getBool("activeinbox"));
+        setText("Active inbox");
+        connect(this, SIGNAL(triggered(bool)), this, SLOT(set_value(bool)));
+    }
+
+public slots:
+    void set_value(bool val)
+    {
+        foldercfg.setBool("activeinbox", val);
+    }
+};
+
 class FolderView : public QTableView
 {
     Q_OBJECT

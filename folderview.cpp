@@ -31,6 +31,7 @@ void FolderView::contextMenuEvent(QContextMenuEvent *event)
     config::Folder foldercfg = folder_model->folders.config.folder(f->folder);
 
     QMenu menu(this);
+    menu.addAction(new ActiveInboxAction(foldercfg, &menu));
     menu.addAction(new ViewAlwaysAction(foldercfg, &menu));
     menu.addAction(new HideAlwaysAction(foldercfg, &menu));
     menu.exec(event->globalPos());

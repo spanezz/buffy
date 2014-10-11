@@ -29,6 +29,7 @@ void Folders::refresh()
 bool Folder::is_visible(bool view_all, bool view_all_nonempty, bool view_all_flagged) const
 {
     if (view_all) return true;
+    if (cfg.getBool("activeinbox")) return true;
     if (cfg.forceview()) return true;
     if (cfg.forcehide()) return false;
     if (folder.getMsgUnread()) return true;

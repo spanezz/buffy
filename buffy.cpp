@@ -11,6 +11,7 @@ Buffy::Buffy(QWidget *parent) :
     update_timer(this),
     folders_model(folders),
     sorterfilter(folders),
+    preferences(this),
     ui(new Ui::Buffy)
 {
     //setStyleSheet("QHeaderView::section:horizontal {margin-left: 0; margin-right:0;}");
@@ -37,6 +38,7 @@ Buffy::Buffy(QWidget *parent) :
     connect(ui->action_column_unread, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_column_total, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_column_flagged, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
+    connect(ui->action_preferences, SIGNAL(triggered()), this, SLOT(do_preferences()));
 
     connect(header, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sort_changed(int, Qt::SortOrder)));
     connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
@@ -153,6 +155,26 @@ void Buffy::do_column_visibility_change()
     view.setBool("col_flagged", ui->action_column_flagged->isChecked());
 
     update_column_visibility();
+}
+
+void Buffy::do_preferences()
+{
+    // Fill preferences
+    preferences.from_config(folders.config);
+
+    // Run the dialog
+    if (preferences.exec() == QDialog::Rejected)
+        return;
+
+    // Read back things if accepted
+    preferences.to_config(folders.config);
+
+    // Rescan folders
+    do_rescan();
+
+    // Reset update interval
+    update_timer.stop();
+    update_timer.start(folders.config.general().interval() * 1000);
 }
 
 void Buffy::save_config()
