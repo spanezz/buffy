@@ -43,6 +43,7 @@ public slots:
     void do_show();
     void do_rescan();
     void do_refresh();
+    void set_active_inbox(QString folder, bool value);
 
 private slots:
     void do_quit();

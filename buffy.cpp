@@ -172,6 +172,20 @@ void Buffy::do_refresh()
         tray.setIcon(QIcon(":/icons/mail-closed"));
 }
 
+void Buffy::set_active_inbox(QString folder, bool value)
+{
+    std::string folder_name(folder.toStdString());
+    for (auto f: folders.all)
+    {
+        if (f.folder.name() == folder_name)
+        {
+            f.cfg.setBool("activeinbox", value);
+            break;
+        }
+    }
+    do_refresh();
+}
+
 void Buffy::do_visibility_change()
 {
     folders.config.view().setEmpty(ui->action_view_all->isChecked());

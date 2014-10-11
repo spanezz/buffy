@@ -8,7 +8,7 @@ BuffyServer::BuffyServer(QApplication& app, Buffy& buffy) :
 
 void BuffyServer::set_active_inbox(QString folder_name, bool value)
 {
-    qDebug() << "set_active_inbox " << folder_name << " " << value;
+    buffy.set_active_inbox(folder_name, value);
 }
 
 void BuffyServer::set_visible(bool value)
