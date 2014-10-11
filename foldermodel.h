@@ -9,10 +9,9 @@ class FolderModel : public QAbstractTableModel
 {
     Q_OBJECT
 
-protected:
+public:
     Folders& folders;
 
-public:
     enum ColumnType {
         CT_INVALID,
         CT_NAME,

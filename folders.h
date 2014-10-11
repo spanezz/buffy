@@ -8,8 +8,7 @@
 struct Folder
 {
     buffy::MailFolder folder;
-    bool always_show;
-    bool always_hide;
+    buffy::config::Folder cfg;
 
     bool is_visible(bool view_all, bool view_all_nonempty, bool view_all_flagged) const;
 };

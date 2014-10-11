@@ -1,5 +1,6 @@
 #include "sorterfilter.h"
 #include "foldermodel.h"
+#include <QDebug>
 
 SorterFilter::SorterFilter(Folders& folders, QObject *parent) :
     QSortFilterProxyModel(parent), folders(folders)

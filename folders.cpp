@@ -10,7 +10,7 @@ void Folders::consume(MailFolder &folder)
 {
     if (folder.changed()) folder.updateStatistics();
     config::Folder fc = config.folder(folder);
-    all.emplace_back(Folder{ folder, fc.forceview(), fc.forcehide() });
+    all.emplace_back(Folder{ folder, fc });
 }
 
 void Folders::rescan()
@@ -29,7 +29,8 @@ void Folders::refresh()
 bool Folder::is_visible(bool view_all, bool view_all_nonempty, bool view_all_flagged) const
 {
     if (view_all) return true;
-    if (always_hide) return false;
+    if (cfg.forceview()) return true;
+    if (cfg.forcehide()) return false;
     if (folder.getMsgUnread()) return true;
     if (view_all_flagged && folder.getMsgFlagged()) return true;
     if (view_all_nonempty && folder.getMsgTotal()) return true;
