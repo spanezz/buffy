@@ -57,6 +57,8 @@ Buffy::Buffy(QWidget *parent) :
 
     update_column_visibility();
 
+    update_timer.start(folders.config.general().interval() * 1000);
+
     config::Section prefs(folders.config.application("buffy"));
     if (prefs.getBool("sorted"))
     {
