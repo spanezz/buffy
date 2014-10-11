@@ -39,6 +39,7 @@ Buffy::Buffy(QWidget *parent) :
     connect(ui->action_column_total, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_column_flagged, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_preferences, SIGNAL(triggered()), this, SLOT(do_preferences()));
+    connect(&tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(tray_activated(QSystemTrayIcon::ActivationReason)));
 
     connect(header, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sort_changed(int, Qt::SortOrder)));
     connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
@@ -62,6 +63,7 @@ Buffy::Buffy(QWidget *parent) :
     update_timer.start(folders.config.general().interval() * 1000);
 
     config::Section prefs(folders.config.application("buffy"));
+    prefs.addDefault("hidden", "false");
     if (prefs.getBool("sorted"))
     {
         int col = prefs.getInt("sort_col_id") - 1;
@@ -87,11 +89,24 @@ Buffy::Buffy(QWidget *parent) :
         int saved_h = prefs.getInt("winh");
         resize(QSize(saved_w, saved_h));
     }
+
+    tray.show();
+
+    if (prefs.getBool("hidden"))
+        hide();
 }
 
 Buffy::~Buffy()
 {
     delete ui;
+}
+
+void Buffy::closeEvent(QCloseEvent *event)
+{
+    config::Section prefs(folders.config.application("buffy"));
+    prefs.setBool("hidden", true);
+    hide();
+    event->ignore();
 }
 
 void Buffy::resizeEvent(QResizeEvent *event)
@@ -198,6 +213,32 @@ void Buffy::folder_activated(const QModelIndex &idx)
     if (!f) return;
     qDebug() << "Running " << m.command("gui").c_str();
     m.run(f->folder, "gui");
+}
+
+void Buffy::tray_activated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason)
+    {
+        //QSystemTrayIcon::Unknown	0	Unknown reason
+        //QSystemTrayIcon::Context	1	The context menu for the system tray entry was requested
+        //QSystemTrayIcon::DoubleClick	2	The system tray entry was double clicked
+        case QSystemTrayIcon::Trigger:
+        {
+            config::Section prefs(folders.config.application("buffy"));
+
+            // The system tray entry was clicked
+            if (isVisible())
+            {
+                hide();
+                prefs.setBool("hidden", true);
+            } else {
+                show();
+                prefs.setBool("hidden", false);
+            }
+            break;
+        }
+        //QSystemTrayIcon::MiddleClick	4
+    }
 }
 
 

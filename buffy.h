@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QSystemTrayIcon>
 #include "folders.h"
 #include "foldermodel.h"
 #include "sorterfilter.h"
@@ -17,6 +18,7 @@ class Buffy : public QMainWindow
     Q_OBJECT
 
 protected:
+    void closeEvent(QCloseEvent *event) override;
     void resizeEvent(QResizeEvent* event) override;
     void moveEvent(QMoveEvent* event) override;
     void update_column_visibility();
@@ -27,6 +29,7 @@ public:
     FolderModel folders_model;
     SorterFilter sorterfilter;
     Preferences preferences;
+    QSystemTrayIcon tray;
 
     explicit Buffy(QWidget *parent = 0);
     ~Buffy();
@@ -41,6 +44,7 @@ private slots:
     void save_config();
     void sort_changed(int logicalIndex, Qt::SortOrder order);
     void folder_activated(const QModelIndex&);
+    void tray_activated(QSystemTrayIcon::ActivationReason reason);
 
 private:
     Ui::Buffy *ui;
