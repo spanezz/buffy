@@ -6,9 +6,11 @@
 
 using namespace buffy;
 
-Buffy::Buffy(QWidget *parent) :
+Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     QMainWindow(parent),
+    app(app),
     update_timer(this),
+    folders(folders),
     folders_model(folders),
     sorterfilter(folders),
     preferences(this),
@@ -29,6 +31,7 @@ Buffy::Buffy(QWidget *parent) :
     ui->folders->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
+    connect(ui->action_hide, SIGNAL(triggered()), this, SLOT(do_hide()));
     connect(ui->action_refresh, SIGNAL(triggered()), this, SLOT(do_refresh()));
     connect(ui->action_rescan, SIGNAL(triggered()), this, SLOT(do_rescan()));
     connect(ui->action_view_all, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
@@ -63,7 +66,6 @@ Buffy::Buffy(QWidget *parent) :
     update_timer.start(folders.config.general().interval() * 1000);
 
     config::Section prefs(folders.config.application("buffy"));
-    prefs.addDefault("hidden", "false");
     if (prefs.getBool("sorted"))
     {
         int col = prefs.getInt("sort_col_id") - 1;
@@ -90,10 +92,9 @@ Buffy::Buffy(QWidget *parent) :
         resize(QSize(saved_w, saved_h));
     }
 
+    tray_menu.addAction(ui->action_quit);
+    tray.setContextMenu(&tray_menu);
     tray.show();
-
-    if (prefs.getBool("hidden"))
-        hide();
 }
 
 Buffy::~Buffy()
@@ -128,7 +129,14 @@ void Buffy::moveEvent(QMoveEvent *event)
 void Buffy::do_quit()
 {
     save_config();
-    close();
+    app.quit();
+}
+
+void Buffy::do_hide()
+{
+    config::Section prefs(folders.config.application("buffy"));
+    prefs.setBool("hidden", true);
+    hide();
 }
 
 void Buffy::do_rescan()
@@ -220,7 +228,13 @@ void Buffy::tray_activated(QSystemTrayIcon::ActivationReason reason)
     switch (reason)
     {
         //QSystemTrayIcon::Unknown	0	Unknown reason
-        //QSystemTrayIcon::Context	1	The context menu for the system tray entry was requested
+        case QSystemTrayIcon::Context:
+        {
+            //The context menu for the system tray entry was requested
+          /*  QMenu menu(this);
+            menu.exec(tray.geometry().topLeft());*/
+            break;
+        }
         //QSystemTrayIcon::DoubleClick	2	The system tray entry was double clicked
         case QSystemTrayIcon::Trigger:
         {

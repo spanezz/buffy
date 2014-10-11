@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QSystemTrayIcon>
+#include <QMenu>
 #include "folders.h"
 #include "foldermodel.h"
 #include "sorterfilter.h"
@@ -24,18 +25,21 @@ protected:
     void update_column_visibility();
 
 public:
+    QApplication& app;
     QTimer update_timer;
-    Folders folders;
+    Folders& folders;
     FolderModel folders_model;
     SorterFilter sorterfilter;
     Preferences preferences;
     QSystemTrayIcon tray;
+    QMenu tray_menu;
 
-    explicit Buffy(QWidget *parent = 0);
+    explicit Buffy(QApplication& app, Folders& folders, QWidget *parent = 0);
     ~Buffy();
 
 private slots:
     void do_quit();
+    void do_hide();
     void do_rescan();
     void do_refresh();
     void do_visibility_change();

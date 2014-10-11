@@ -81,7 +81,10 @@
     </property>
     <addaction name="action_refresh"/>
     <addaction name="action_rescan"/>
+    <addaction name="separator"/>
     <addaction name="action_preferences"/>
+    <addaction name="separator"/>
+    <addaction name="action_hide"/>
     <addaction name="action_quit"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -193,6 +196,14 @@
   <action name="action_preferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="action_hide">
+   <property name="text">
+    <string>Hide</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>
