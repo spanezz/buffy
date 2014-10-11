@@ -1,6 +1,7 @@
 #include "foldermodel.h"
 #include <algorithm>
 #include <QColor>
+#include <QFont>
 #include <QDebug>
 
 using namespace buffy;
@@ -81,6 +82,15 @@ QVariant FolderModel::data(const QModelIndex &index, int role) const
         {
         case CT_NAME: return QColor(0xEEEEEE);
         default: return QVariant();
+        }
+        break;
+    case Qt::FontRole:
+        const Folder& f = folders.all[index.row()];
+        if (f.cfg.getBool("activeinbox") && f.folder.getMsgNew())
+        {
+            QFont boldFont;
+            boldFont.setBold(true);
+            return boldFont;
         }
         break;
     }
