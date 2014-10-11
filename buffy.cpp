@@ -94,6 +94,7 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
 
     tray_menu.addAction(ui->action_quit);
     tray.setContextMenu(&tray_menu);
+    tray.setIcon(QIcon(":/icons/mail-closed"));
     tray.show();
 }
 

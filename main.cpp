@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
     prefs.addDefault("hidden", "false");
 
     Buffy w(a, folders);
-
     if (!prefs.getBool("hidden"))
         w.show();
 

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="mail-closed">Mail-closed.svg</file>
+        <file alias="mail-new">Mail-message-new.svg</file>
+    </qresource>
+</RCC>

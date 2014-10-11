@@ -31,3 +31,6 @@ HEADERS  += buffy.h \
 
 FORMS    += buffy.ui \
     preferences.ui
+
+RESOURCES += \
+    resources.qrc
