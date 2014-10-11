@@ -48,8 +48,6 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
     connect(&update_timer, SIGNAL(timeout()), this, SLOT(do_refresh()));
 
-    folders_model.reread_folders();
-
     config::View view = folders.config.view();
     view.addDefault("col_new", "true");
     view.addDefault("col_unread", "true");
@@ -96,6 +94,8 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     tray.setContextMenu(&tray_menu);
     tray.setIcon(QIcon(":/icons/mail-closed"));
     tray.show();
+
+    do_refresh();
 }
 
 Buffy::~Buffy()
@@ -149,6 +149,19 @@ void Buffy::do_rescan()
 void Buffy::do_refresh()
 {
     folders_model.reread_folders();
+
+    bool has_active_new = false;
+    for (auto f: folders.all)
+    {
+        if (!f.cfg.getBool("activeinbox")) continue;
+        if (!f.folder.getMsgNew()) continue;
+        has_active_new = true;
+    }
+
+    if (has_active_new)
+        tray.setIcon(QIcon(":/icons/mail-new"));
+    else
+        tray.setIcon(QIcon(":/icons/mail-closed"));
 }
 
 void Buffy::do_visibility_change()
