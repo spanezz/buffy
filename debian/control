@@ -6,7 +6,7 @@ Build-Depends:
  debhelper (>= 9), dh-buildinfo, pkg-config,
  libbuffy-dev (>= 1.6), libbuffy-dev (<< 2.0),
  libwibble-dev (>= 1.0), libwibble-dev (<< 2.0),
- libqt4-dev
+ qtbase5-dev
 Standards-Version: 3.9.4.0
 Vcs-Git: git://anonscm.debian.org/buffy/buffy-qt.git
 Vcs-Browser: http://anonscm.debian.org/cgit/buffy/buffy-qt.git/

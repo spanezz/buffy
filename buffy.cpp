@@ -26,9 +26,9 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     sorterfilter.setDynamicSortFilter(true);
     ui->folders->setModel(&sorterfilter);
     auto header = ui->folders->horizontalHeader();
-    header->setResizeMode(QHeaderView::ResizeToContents);
+    header->setSectionResizeMode(QHeaderView::ResizeToContents);
     header->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    ui->folders->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->folders->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
     connect(ui->action_hide, SIGNAL(triggered()), this, SLOT(do_hide()));
