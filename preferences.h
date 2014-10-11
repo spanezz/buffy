@@ -2,6 +2,7 @@
 #define PREFERENCES_H
 
 #include <QDialog>
+#include <QStandardItemModel>
 #include <buffy/config/config.h>
 
 namespace Ui {
@@ -12,6 +13,9 @@ class Preferences : public QDialog
 {
     Q_OBJECT
 
+protected:
+    QStandardItemModel mail_programs;
+
 public:
     explicit Preferences(QWidget *parent = 0);
     ~Preferences();
@@ -21,6 +25,7 @@ public:
 
 protected slots:
     void folder_list_context_menu(const QPoint&);
+    void email_programs_context_menu(const QPoint&);
 
 private:
     Ui::Preferences *ui;
