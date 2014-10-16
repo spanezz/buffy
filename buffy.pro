@@ -14,22 +14,23 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = buffy
 TEMPLATE = app
 
-SOURCES += main.cpp\
-        buffy.cpp \
-    foldermodel.cpp \
+SOURCES += \
     folders.cpp \
     sorterfilter.cpp \
     folderview.cpp \
     preferences.cpp \
-    dbus.cpp
+    buffy.cpp \
+    dbus.cpp \
+    main.cpp \
+    tray.cpp
 
 HEADERS  += buffy.h \
-    foldermodel.h \
     folders.h \
     sorterfilter.h \
     folderview.h \
     preferences.h \
-    dbus.h
+    dbus.h \
+    tray.h
 
 FORMS    += buffy.ui \
     preferences.ui

@@ -1,5 +1,4 @@
 #include "folderview.h"
-#include "foldermodel.h"
 #include "folders.h"
 #include "sorterfilter.h"
 #include <QContextMenuEvent>
@@ -22,19 +21,19 @@ void FolderView::contextMenuEvent(QContextMenuEvent *event)
     if (!sorted_model) return;
     QModelIndex source_idx = sorted_model->mapToSource(index);
 
-    FolderModel* folder_model = dynamic_cast<FolderModel*>(sorted_model->sourceModel());
+    Folders* folder_model = dynamic_cast<Folders*>(sorted_model->sourceModel());
     if (!folder_model) return;
 
-    const Folder* f = folder_model->valueAt(source_idx);
+    Folder* f = folder_model->valueAt(source_idx);
     if (!f) return;
 
-    config::Folder foldercfg = folder_model->folders.config.folder(f->folder);
+    config::Folder foldercfg = f->cfg;
 
     QMenu menu(this);
-    menu.addAction(new ActiveInboxAction(foldercfg, &menu));
-    menu.addAction(new ViewAlwaysAction(foldercfg, &menu));
-    menu.addAction(new HideAlwaysAction(foldercfg, &menu));
+    menu.addAction(new ActiveInboxAction(*f, &menu));
+    menu.addAction(new ViewAlwaysAction(*f, &menu));
+    menu.addAction(new HideAlwaysAction(*f, &menu));
     menu.exec(event->globalPos());
 
-    sorted_model->update_visibility();
+    sorted_model->visibility_updated();
 }

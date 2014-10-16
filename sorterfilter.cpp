@@ -1,16 +1,21 @@
 #include "sorterfilter.h"
-#include "foldermodel.h"
 #include <QDebug>
 
 SorterFilter::SorterFilter(Folders& folders, QObject *parent) :
     QSortFilterProxyModel(parent), folders(folders)
 {
-    update_visibility();
+    connect(&folders, SIGNAL(visibility_updated()), this, SLOT(visibility_updated()));
+    invalidateFilter();
+}
+
+void SorterFilter::visibility_updated()
+{
+    invalidateFilter();
 }
 
 bool SorterFilter::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    FolderModel* model = dynamic_cast<FolderModel*>(sourceModel());
+    Folders* model = dynamic_cast<Folders*>(sourceModel());
     if (!model) return true;
 
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
@@ -18,13 +23,5 @@ bool SorterFilter::filterAcceptsRow(int source_row, const QModelIndex &source_pa
     const Folder* f = model->valueAt(index);
     if (!f) return false;
 
-    return f->is_visible(view_all, view_all_nonempty, view_all_flagged);
-}
-
-void SorterFilter::update_visibility(bool refilter)
-{
-    view_all = folders.config.view().empty();
-    view_all_nonempty = folders.config.view().read();
-    view_all_flagged = folders.config.view().important();
-    if (refilter) invalidateFilter();
+    return f->is_visible();
 }

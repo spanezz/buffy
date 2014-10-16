@@ -1,4 +1,5 @@
 #include "buffy.h"
+#include "tray.h"
 #include <QApplication>
 #include <QDBusConnection>
 #include <QDBusInterface>
@@ -50,12 +51,18 @@ struct Main
     int run_gui()
     {
         Folders folders;
+        folders.rescan();
+        folders.refresh();
+
         config::Section prefs(folders.config.application("buffy"));
         prefs.addDefault("hidden", "false");
 
         Buffy w(app, folders);
         if (!prefs.getBool("hidden"))
             w.show();
+
+        Tray tray(folders, w);
+        tray.show();
 
         BuffyServer server(app, w);
         QDBusConnection::sessionBus().registerService("org.enricozini.buffy");

@@ -11,7 +11,6 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     app(app),
     update_timer(this),
     folders(folders),
-    folders_model(folders),
     sorterfilter(folders),
     preferences(this),
     ui(new Ui::Buffy)
@@ -22,7 +21,7 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     setStyleSheet("QHeaderView::section:horizontal {margin-top: 3px; margin-bottom: 3px; margin-left: 0; margin-right: 0; }");
 
     ui->setupUi(this);
-    sorterfilter.setSourceModel(&folders_model);
+    sorterfilter.setSourceModel(&folders);
     sorterfilter.setDynamicSortFilter(true);
     ui->folders->setModel(&sorterfilter);
     auto header = ui->folders->horizontalHeader();
@@ -32,8 +31,8 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
 
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
     connect(ui->action_hide, SIGNAL(triggered()), this, SLOT(do_hide()));
-    connect(ui->action_refresh, SIGNAL(triggered()), this, SLOT(do_refresh()));
-    connect(ui->action_rescan, SIGNAL(triggered()), this, SLOT(do_rescan()));
+    connect(ui->action_refresh, SIGNAL(triggered()), &folders, SLOT(refresh()));
+    connect(ui->action_rescan, SIGNAL(triggered()), &folders, SLOT(rescan()));
     connect(ui->action_view_all, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
     connect(ui->action_view_all_nonempty, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
     connect(ui->action_view_all_flagged, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
@@ -42,11 +41,10 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     connect(ui->action_column_total, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_column_flagged, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_preferences, SIGNAL(triggered()), this, SLOT(do_preferences()));
-    connect(&tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(tray_activated(QSystemTrayIcon::ActivationReason)));
 
     connect(header, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sort_changed(int, Qt::SortOrder)));
     connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
-    connect(&update_timer, SIGNAL(timeout()), this, SLOT(do_refresh()));
+    connect(&update_timer, SIGNAL(timeout()), &folders, SLOT(refresh()));
 
     config::View view = folders.config.view();
     view.addDefault("col_new", "true");
@@ -89,19 +87,14 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
         int saved_h = prefs.getInt("winh");
         resize(QSize(saved_w, saved_h));
     }
-
-    tray_menu.addAction(ui->action_quit);
-    tray.setContextMenu(&tray_menu);
-    tray.setIcon(QIcon(":/icons/mail-closed"));
-    tray.show();
-
-    do_refresh();
 }
 
 Buffy::~Buffy()
 {
     delete ui;
 }
+
+QAction *Buffy::action_quit() { return ui->action_quit; }
 
 void Buffy::closeEvent(QCloseEvent *event)
 {
@@ -148,50 +141,12 @@ void Buffy::do_show()
     prefs.setBool("hidden", false);
 }
 
-void Buffy::do_rescan()
-{
-    folders.rescan();
-    sorterfilter.update_visibility();
-}
-
-void Buffy::do_refresh()
-{
-    folders_model.reread_folders();
-
-    bool has_active_new = false;
-    for (auto f: folders.all)
-    {
-        if (!f.cfg.getBool("activeinbox")) continue;
-        if (!f.folder.getMsgNew()) continue;
-        has_active_new = true;
-    }
-
-    if (has_active_new)
-        tray.setIcon(QIcon(":/icons/mail-new"));
-    else
-        tray.setIcon(QIcon(":/icons/mail-closed"));
-}
-
-void Buffy::set_active_inbox(QString folder, bool value)
-{
-    std::string folder_name(folder.toStdString());
-    for (auto f: folders.all)
-    {
-        if (f.folder.name() == folder_name)
-        {
-            f.cfg.setBool("activeinbox", value);
-            break;
-        }
-    }
-    do_refresh();
-}
-
 void Buffy::do_visibility_change()
 {
-    folders.config.view().setEmpty(ui->action_view_all->isChecked());
-    folders.config.view().setRead(ui->action_view_all_nonempty->isChecked());
-    folders.config.view().setImportant(ui->action_view_all_flagged->isChecked());
-    sorterfilter.update_visibility();
+    folders.set_visibility(
+                ui->action_view_all->isChecked(),
+                ui->action_view_all_nonempty->isChecked(),
+                ui->action_view_all_flagged->isChecked());
 }
 
 void Buffy::update_column_visibility()
@@ -229,7 +184,7 @@ void Buffy::do_preferences()
     preferences.to_config(folders.config);
 
     // Rescan folders
-    do_rescan();
+    folders.rescan();
 
     // Reset update interval
     update_timer.stop();
@@ -252,60 +207,7 @@ void Buffy::sort_changed(int logicalIndex, Qt::SortOrder order)
 void Buffy::folder_activated(const QModelIndex &idx)
 {
     QModelIndex source_idx = sorterfilter.mapToSource(idx);
-    const Folder* f = folders_model.valueAt(source_idx);
+    Folder* f = folders.valueAt(source_idx);
     if (!f) return;
-    folders.run_email_program(f->folder);
-}
-
-void Buffy::tray_activated(QSystemTrayIcon::ActivationReason reason)
-{
-    switch (reason)
-    {
-        //QSystemTrayIcon::Unknown	0	Unknown reason
-        case QSystemTrayIcon::Context:
-        {
-            // The context menu for the system tray entry was requested
-            tray_menu.clear();
-            bool has_inboxes = false;
-            for (auto f: folders.all)
-            {
-                if (!f.cfg.getBool("activeinbox")) continue;
-                tray_menu.addAction(new ActivateInboxAction(folders, f.folder, &tray_menu));
-                has_inboxes = true;
-            }
-            if (has_inboxes)
-                tray_menu.addSeparator();
-            tray_menu.addAction(ui->action_quit);
-            break;
-        }
-        case QSystemTrayIcon::MiddleClick:
-        case QSystemTrayIcon::DoubleClick:
-        case QSystemTrayIcon::Trigger:
-        {
-            config::Section prefs(folders.config.application("buffy"));
-
-            // The system tray entry was clicked
-            if (isVisible())
-            {
-                do_hide();
-            } else {
-                do_show();
-            }
-            break;
-        }
-    }
-}
-
-ActivateInboxAction::ActivateInboxAction(Folders &folders, buffy::MailFolder folder, QObject *parent)
-    : QAction(parent), folders(folders), folder(folder)
-{
-    connect(this, SIGNAL(triggered()), this, SLOT(on_trigger()));
-    QString name(QString::fromStdString(folder.name()));
-    name += QString(" (%1 new)").arg(folder.getMsgNew());
-    setText(name);
-}
-
-void ActivateInboxAction::on_trigger()
-{
-    folders.run_email_program(folder);
+    f->run_email_program();
 }
