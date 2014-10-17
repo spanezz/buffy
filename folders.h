@@ -16,13 +16,13 @@ class Folder : public QObject
 public:
     Folders& folders;
     buffy::MailFolder folder;
-    buffy::config::Folder cfg;
 
     Folder(Folders& folders,
            buffy::MailFolder folder,
-           buffy::config::Folder cfg,
            QObject* parent=0);
 
+    buffy::config::Folder cfg();
+    buffy::config::Folder cfg() const;
     bool is_visible() const;
 
 public slots:
@@ -92,7 +92,7 @@ public:
     ViewAlwaysAction(Folder& folder, QObject *parent)
         : FolderAction(folder, parent)
     {
-        setChecked(folder.cfg.forceview());
+        setChecked(folder.cfg().forceview());
         setText("View always");
         connect(this, SIGNAL(triggered(bool)), this, SLOT(set_value(bool)));
     }
@@ -100,7 +100,7 @@ public:
 public slots:
     void set_value(bool val)
     {
-        folder.cfg.setForceView(val);
+        folder.cfg().setForceView(val);
     }
 };
 
@@ -112,7 +112,7 @@ public:
     HideAlwaysAction(Folder& folder, QObject *parent)
         : FolderAction(folder, parent)
     {
-        setChecked(folder.cfg.forcehide());
+        setChecked(folder.cfg().forcehide());
         setText("Hide always");
         connect(this, SIGNAL(triggered(bool)), this, SLOT(set_value(bool)));
     }
@@ -120,7 +120,7 @@ public:
 public slots:
     void set_value(bool val)
     {
-        folder.cfg.setForceHide(val);
+        folder.cfg().setForceHide(val);
     }
 };
 
@@ -132,8 +132,7 @@ public:
     ActiveInboxAction(Folder& folder, QObject *parent)
         : FolderAction(folder, parent)
     {
-        folder.cfg.addDefault("activeinbox", "false");
-        setChecked(folder.cfg.getBool("activeinbox"));
+        setChecked(folder.cfg().getBool("activeinbox"));
         setText("Active inbox");
         connect(this, SIGNAL(triggered(bool)), &folder, SLOT(set_active_inbox(bool)));
     }

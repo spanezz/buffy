@@ -30,10 +30,20 @@ static ColumnType resolveColumnType(int column)
 }
 
 
-Folder::Folder(Folders &folders, MailFolder folder, buffy::config::Folder cfg, QObject *parent)
-    : QObject(parent), folders(folders), folder(folder), cfg(cfg)
+Folder::Folder(Folders &folders, MailFolder folder, QObject *parent)
+    : QObject(parent), folders(folders), folder(folder)
 {
+    cfg().addDefault("activeinbox", "false");
+}
 
+config::Folder Folder::cfg()
+{
+    return folders.config.folder(folder);
+}
+
+config::Folder Folder::cfg() const
+{
+    return folders.config.folder(folder);
 }
 
 bool Folder::is_visible() const
@@ -41,6 +51,7 @@ bool Folder::is_visible() const
     // View all folders, no matter what
     bool view_all = folders.config.view().empty();
     if (view_all) return true;
+    auto cfg = this->cfg();
     if (cfg.getBool("activeinbox")) return true;
     if (cfg.forceview()) return true;
     if (cfg.forcehide()) return false;
@@ -57,7 +68,7 @@ bool Folder::is_visible() const
 
 void Folder::set_active_inbox(bool value)
 {
-    cfg.setBool("activeinbox", value);
+    cfg().setBool("activeinbox", value);
     emit folders.visibility_updated();
 }
 
@@ -93,8 +104,7 @@ void Folders::rescan()
         for (auto folder: folders)
         {
             if (folder.changed()) folder.updateStatistics();
-            config::Folder fc = config.folder(folder);
-            all.push_back(new Folder(*this, folder, fc, this));
+            all.push_back(new Folder(*this, folder, this));
         }
     }
 
@@ -117,7 +127,7 @@ void Folders::refresh()
 bool Folders::has_active_new() const
 {
     for (auto f: all)
-        if (f->cfg.getBool("activeinbox") && f->folder.getMsgNew())
+        if (f->cfg().getBool("activeinbox") && f->folder.getMsgNew())
             return true;
     return false;
 }
@@ -194,7 +204,7 @@ QVariant Folders::data(const QModelIndex &index, int role) const
         break;
     case Qt::FontRole:
         const Folder& f = *all[index.row()];
-        if (f.cfg.getBool("activeinbox") && f.folder.getMsgNew())
+        if (f.cfg().getBool("activeinbox") && f.folder.getMsgNew())
         {
             QFont boldFont;
             boldFont.setBold(true);
@@ -281,7 +291,7 @@ void Folders::each_active_inbox(std::function<void (Folder &)> func)
 {
     for (auto f: all)
     {
-        if (!f->cfg.getBool("activeinbox")) continue;
+        if (!f->cfg().getBool("activeinbox")) continue;
         func(*f);
     }
 }
