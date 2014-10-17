@@ -9,6 +9,7 @@ BuffyServer::BuffyServer(QApplication& app, Buffy& buffy) :
 void BuffyServer::set_active_inbox(QString folder_name, bool value)
 {
     Folder* f = buffy.folders.by_name(folder_name.toStdString());
+    if (!f) return;
     f->set_active_inbox(value);
 }
 
