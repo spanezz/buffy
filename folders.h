@@ -45,7 +45,7 @@ public:
 
     bool has_active_new() const;
 
-    void set_visibility(bool view_all, bool view_all_nonempty, bool view_all_flagged);
+    void set_visibility(bool view_all, bool view_all_nonempty, bool view_all_flagged, bool view_only_active_inboxes);
 
     Folder* valueAt(const QModelIndex& index);
     Folder* by_name(const std::string& name);

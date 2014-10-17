@@ -98,6 +98,7 @@
     <addaction name="action_view_all"/>
     <addaction name="action_view_all_nonempty"/>
     <addaction name="action_view_all_flagged"/>
+    <addaction name="action_view_only_active_inboxes"/>
     <addaction name="separator"/>
     <addaction name="action_column_new"/>
     <addaction name="action_column_unread"/>
@@ -147,6 +148,9 @@
    </property>
    <property name="text">
     <string>View all folders</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="action_view_all_flagged">
@@ -208,6 +212,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="action_view_only_active_inboxes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>View only active inboxes</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
  </widget>

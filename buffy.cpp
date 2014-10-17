@@ -36,6 +36,7 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     connect(ui->action_view_all, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
     connect(ui->action_view_all_nonempty, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
     connect(ui->action_view_all_flagged, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
+    connect(ui->action_view_only_active_inboxes, SIGNAL(triggered()), this, SLOT(do_visibility_change()));
     connect(ui->action_column_new, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_column_unread, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_column_total, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
@@ -146,7 +147,8 @@ void Buffy::do_visibility_change()
     folders.set_visibility(
                 ui->action_view_all->isChecked(),
                 ui->action_view_all_nonempty->isChecked(),
-                ui->action_view_all_flagged->isChecked());
+                ui->action_view_all_flagged->isChecked(),
+                ui->action_view_only_active_inboxes->isChecked());
 }
 
 void Buffy::update_column_visibility()

@@ -43,6 +43,7 @@ bool Folder::is_visible() const
     if (cfg.getBool("activeinbox")) return true;
     if (cfg.forceview()) return true;
     if (cfg.forcehide()) return false;
+    if (folders.config.view().getBool("only_active_inboxes")) return false;
     if (folder.getMsgUnread()) return true;
     // View any folder as long as it has flagged messages
     bool view_all_flagged = folders.config.view().important();
@@ -62,7 +63,7 @@ void Folder::set_active_inbox(bool value)
 void Folder::run_email_program()
 {
     config::MailProgram m = folders.config.selectedMailProgram();
-    qDebug() << "Running " << m.command("gui").c_str();
+    //qDebug() << "Running " << m.command("gui").c_str();
     m.run(folder, "gui");
 }
 
@@ -70,6 +71,7 @@ void Folder::run_email_program()
 Folders::Folders(QObject* parent)
     : QAbstractTableModel(parent)
 {
+    config.view().addDefault("only_active_inboxes", "false");
 }
 
 Folders::~Folders()
@@ -119,11 +121,12 @@ bool Folders::has_active_new() const
     return false;
 }
 
-void Folders::set_visibility(bool view_all, bool view_all_nonempty, bool view_all_flagged)
+void Folders::set_visibility(bool view_all, bool view_all_nonempty, bool view_all_flagged, bool view_only_active_inboxes)
 {
     config.view().setEmpty(view_all);
     config.view().setRead(view_all_nonempty);
     config.view().setImportant(view_all_flagged);
+    config.view().setBool("only_active_inboxes", view_only_active_inboxes);
     emit visibility_updated();
 }
 
