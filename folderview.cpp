@@ -33,8 +33,6 @@ void FolderView::contextMenuEvent(QContextMenuEvent *event)
     Folder* f = folder_model->valueAt(source_idx);
     if (!f) return;
 
-    config::Folder foldercfg = f->cfg;
-
     QMenu menu(this);
     menu.addAction(new ActiveInboxAction(*f, &menu));
     menu.addAction(new ViewAlwaysAction(*f, &menu));
