@@ -2,6 +2,7 @@
 #include "folders.h"
 #include "sorterfilter.h"
 #include <QContextMenuEvent>
+#include <QHeaderView>
 #include <QMenu>
 #include <QDebug>
 
@@ -11,6 +12,11 @@ using namespace buffy;
 FolderView::FolderView(QWidget *parent) :
     QTableView(parent)
 {
+    setDragEnabled(true);
+    verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    auto header = horizontalHeader();
+    header->setSectionResizeMode(QHeaderView::ResizeToContents);
+    header->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 void FolderView::contextMenuEvent(QContextMenuEvent *event)

@@ -24,10 +24,6 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     sorterfilter.setSourceModel(&folders);
     sorterfilter.setDynamicSortFilter(true);
     ui->folders->setModel(&sorterfilter);
-    auto header = ui->folders->horizontalHeader();
-    header->setSectionResizeMode(QHeaderView::ResizeToContents);
-    header->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    ui->folders->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     connect(ui->action_quit, SIGNAL(triggered()), this, SLOT(do_quit()));
     connect(ui->action_hide, SIGNAL(triggered()), this, SLOT(do_hide()));
@@ -43,7 +39,7 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     connect(ui->action_column_flagged, SIGNAL(triggered()), this, SLOT(do_column_visibility_change()));
     connect(ui->action_preferences, SIGNAL(triggered()), this, SLOT(do_preferences()));
 
-    connect(header, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sort_changed(int, Qt::SortOrder)));
+    connect(ui->folders->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sort_changed(int, Qt::SortOrder)));
     connect(ui->folders, SIGNAL(activated(const QModelIndex&)), this, SLOT(folder_activated(const QModelIndex&)));
     connect(&update_timer, SIGNAL(timeout()), &folders, SLOT(refresh()));
 
@@ -69,7 +65,7 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
         Qt::SortOrder order = prefs.getInt("sort_order") == 0 ? Qt::AscendingOrder : Qt::DescendingOrder;
 
         //sorterfilter.sort(col, order);
-        header->setSortIndicator(col, order);
+        ui->folders->horizontalHeader()->setSortIndicator(col, order);
     }
 
     ui->action_view_all->setChecked(folders.config.view().empty());
