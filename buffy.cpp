@@ -71,6 +71,7 @@ Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     ui->action_view_all->setChecked(folders.config.view().empty());
     ui->action_view_all_nonempty->setChecked(folders.config.view().read());
     ui->action_view_all_flagged->setChecked(folders.config.view().important());
+    ui->action_view_only_active_inboxes->setChecked(folders.config.view().getBool("only_active_inboxes"));
 
     QSize default_size = size();
     prefs.addDefault("winw", QString::number(default_size.width()).toStdString());
