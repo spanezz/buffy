@@ -100,9 +100,14 @@ void Folders::rescan()
 
 void Folders::refresh()
 {
-    for (auto f: all)
-        if (f->folder.changed())
-            f->folder.updateStatistics();
+    for (unsigned i = 0; i < all.size(); ++i)
+    {
+        if (all[i]->folder.changed())
+        {
+            all[i]->folder.updateStatistics();
+            emit dataChanged(createIndex(i, 0), createIndex(i, 5));
+        }
+    }
     emit visibility_updated();
 }
 

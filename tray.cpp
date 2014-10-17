@@ -54,23 +54,10 @@ void Tray::tray_activated(QSystemTrayIcon::ActivationReason reason)
 
 void Tray::visibility_updated()
 {
-    //icon_read(":/icons/mail-closed"),
-    //icon_unread(":/icons/mail-new"),
-    //icon_read(QIcon::fromTheme("mail-read")),
-    //icon_unread(QIcon::fromTheme("mail-unread")),
-    //        QIcon foo(":/icons/mail-new");
-    //        qDebug() << "ICONS " << icon_read << " " << icon_unread << " " << foo;
-    //        qDebug() << "ICON READ " << icon_read.isNull() << " " << icon_read.name();
-
     QIcon icon;
     if (folders.has_active_new())
-    {
         icon = QIcon(":/icons/mail-new");
-    }
     else
-    {
         icon = QIcon(":/icons/mail-closed");
-    }
-    qDebug() << "ISNULL" << icon.isNull();
     setIcon(icon);
 }
