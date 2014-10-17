@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <QColor>
 #include <QFont>
+#include <QMimeData>
 #include <QDebug>
 
 using namespace buffy;
@@ -231,7 +232,34 @@ Qt::ItemFlags Folders::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) return Qt::NoItemFlags;
     if ((unsigned)index.row() >= all.size()) return Qt::NoItemFlags;
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+}
+
+QStringList Folders::mimeTypes() const
+{
+    QStringList types;
+    types << "text/plain";
+    return types;
+}
+
+QMimeData* Folders::mimeData(const QModelIndexList &indices) const
+{
+    QMimeData* mimeData = new QMimeData();
+    QString data;
+
+    if (indices.isEmpty())
+        data = "";
+    else
+    {
+        int row = indices.first().row();
+        if (row < 0 || row >= all.size())
+            data = "";
+        else
+            data = QString::fromStdString(all[row]->folder.path());
+    }
+
+    mimeData->setData("text/plain", data.toUtf8());
+    return mimeData;
 }
 
 Folder* Folders::valueAt(const QModelIndex &index)
