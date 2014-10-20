@@ -41,7 +41,7 @@ void Tray::tray_activated(QSystemTrayIcon::ActivationReason reason)
             config::Section prefs(folders.config.application("buffy"));
 
             // The system tray entry was clicked
-            if (isVisible())
+            if (buffy.isVisible())
             {
                 buffy.do_hide();
             } else {
