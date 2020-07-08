@@ -48,7 +48,7 @@ install(TARGETS buffy RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # Test suite
 enable_testing()
-file(GLOB TEST_SOURCES buffy/*-test.cc buffy/utils/test*.cc)
+file(GLOB TEST_SOURCES buffy/*-test.cc buffy/mailfolder/*-test.cc buffy/utils/test*.cc)
 add_executable(test-all ${TEST_SOURCES})
 add_test(NAME test-all COMMAND test-all)
 add_definitions(-DTEST_DATA_DIR="${CMAKE_SOURCE_DIR}/testdata")
