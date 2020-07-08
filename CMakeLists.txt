@@ -16,6 +16,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+
 add_compile_options(-fdiagnostics-color=always -Wformat=2 -Wall -Wextra)
 
 file(GLOB BUFFY_SOURCES *.cpp buffy/*.cc buffy/config/*.cc buffy/mailfolder/*.cc buffy/utils/*.cc)
