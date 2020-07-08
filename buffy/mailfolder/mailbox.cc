@@ -313,7 +313,7 @@ void Mailbox::enumerateFolders(const std::string& parent, MailFolderConsumer& co
         else
             sep = "";
         std::string candidate = parent + sep + name;
-        if (sys::access(candidate, R_OK) != 0)
+        if (!sys::access(candidate, R_OK))
             continue;
         MailFolder f(accessFolder(candidate));
         if (f)
