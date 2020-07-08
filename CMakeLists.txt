@@ -36,3 +36,4 @@ target_link_libraries(buffy ${GLIB_LIBRARIES} ${ZLIB_LIBRARIES})
 target_include_directories(buffy PUBLIC ${GLIB_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS})
 target_compile_options(buffy PUBLIC ${GLIB_CFLAGS_OTHER} ${ZLIB_CFLAGS_OTHER})
 
+install(TARGETS buffy RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
