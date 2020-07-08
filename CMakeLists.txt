@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.13.4)
 
 include(GNUInstallDirs)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include(CTest)
+endif()
 
 project(buffy VERSION 2.0 LANGUAGES CXX)
 
@@ -48,6 +51,7 @@ enable_testing()
 file(GLOB TEST_SOURCES buffy/*-test.cc buffy/utils/test*.cc)
 add_executable(test-all ${TEST_SOURCES})
 add_test(NAME test-all COMMAND test-all)
+add_definitions(-DTEST_DATA_DIR="${CMAKE_SOURCE_DIR}/testdata")
 target_include_directories(test-all PRIVATE ${CMAKE_SOURCE_DIR})
 target_link_libraries(test-all ${GLIB_LIBRARIES} ${ZLIB_LIBRARIES} libbuffy)
 target_include_directories(test-all PUBLIC ${GLIB_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS})

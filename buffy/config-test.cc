@@ -1,10 +1,17 @@
 #include "buffy/utils/tests.h"
+#include "buffy/utils/sys.h"
+#include "buffy/utils/string.h"
 #include "buffy/config.h"
 #include "buffy/mailfolder/mailbox.h"
 #include <cstdlib>
 #include <unistd.h>
 
+#ifndef TEST_DATA_DIR
+#define TEST_DATA_DIR "."
+#endif
+
 using namespace buffy::utils::tests;
+using namespace buffy::utils;
 
 namespace {
 
@@ -37,56 +44,36 @@ add_method("application_value_with_path", []() {
     wassert(actual(conf.application("foo").get("bar/baz")) == "lippo1");
 });
 
-#if 0
-struct buffy_config_shar {
-    config::Config conf;
-    buffy_config_shar() : conf("nonexisting-config.txt") {
-    }
-    ~buffy_config_shar() {
-        unlink("test-config-saved.txt");
-    }
-};
+add_method("mail_programs", []() {
+    buffy::config::Config conf;
+    auto programs = conf.mailPrograms();
+    wassert(actual(programs.size()) == 2u);
 
-template<> template<> void to::test<1>() { test1(); }
-template<> template<> void to::test<2>() { test2(); }
-
-// Check mail programs
-template<> template<>
-void to::test<3>()
-{
-    vector<string> programs = conf.mailPrograms();
-    ensure_equals(programs.size(), 2u);
-
-    ensure_equals(conf.selectedMailProgram().name(), "mutt");
+    wassert(actual(conf.selectedMailProgram().name()) == "mutt");
 
     conf.selectMailProgram("Other");
-    ensure_equals(conf.selectedMailProgram().name(), "Other");
-    ensure_equals(conf.mailProgram("mutt").selected(), false);
-}
+    wassert(actual(conf.selectedMailProgram().name()) == "Other");
+    wassert(actual(conf.mailProgram("mutt").selected()) == false);
+});
 
-// Check exotic characters in names
-template<> template<>
-void to::test<4>()
-{
-    string funky = "fo%%bar.baz >< foo/bar\\baz 2.0";
-    ensure_equals(conf.application(funky).get("bar"), "");
+add_method("exotic_chars", []() {
+    buffy::config::Config conf;
+    std::string funky = "fo%%bar.baz >< foo/bar\\baz 2.0";
+    wassert(actual(conf.application(funky).get("bar")) == "");
     conf.application(funky).set("bar", "cippo2");
-    ensure_equals(conf.application(funky).get("bar"), "cippo2");
-}
+    wassert(actual(conf.application(funky).get("bar")) == "cippo2");
+});
 
-// Check loading an existing configuration
-template<> template<>
-void to::test<5> ()
-{
-    config::Config conf0("test-config.txt");
+add_method("load", []() {
+    buffy::config::Config conf0(TEST_DATA_DIR "/test-config.txt");
 
-    ensure(!conf0.view().read());
-    ensure(!conf0.view().empty());
-    ensure(conf0.view().important());
-    ensure_equals(conf0.general().interval(), 600);
+    wassert_false(conf0.view().read());
+    wassert_false(conf0.view().empty());
+    wassert_true(conf0.view().important());
+    wassert(actual(conf0.general().interval()) == 600);
 
-    vector<string> locations = conf0.locations();
-    ensure_equals(locations.size(), 4u);
+    auto locations = conf0.locations();
+    wassert(actual(locations.size()) == 4u);
 
 #if 0
     /*
@@ -97,48 +84,55 @@ void to::test<5> ()
        */
 #endif
 
-    vector<string> programs = conf0.mailPrograms();
-    ensure_equals(programs.size(), 2u);
+    auto programs = conf0.mailPrograms();
+    wassert(actual(programs.size()) == 2u);
 
-    ensure_equals(conf0.selectedMailProgram().name(), "mutt");
-}
+    wassert(actual(conf0.selectedMailProgram().name()) == "mutt");
+});
 
-// Check persistance when saving and reloading an existing configuration
-template<> template<>
-void to::test<6> ()
-{
-    config::Config conf0;
-    stringstream str;
-    str << getpid();
-    string testString(str.str());
+add_method("persist", []() {
+    sys::Tempdir workdir;
+    std::string workfile = str::joinpath(workdir.name(), "test-config-saved.txt");
+
+    buffy::config::Config conf0;
+    std::string testString(std::to_string(getpid()));
     buffy::MailFolder testFolder(new buffy::mailfolder::Mailbox("mbox/empty.mbox"));
 
     // Set a few nonstandard values, then save them
-    vector<string> locations;
+    std::vector<std::string> locations;
     conf0.location("foo");
     conf0.location("bar");
     conf0.location("baz");
     conf0.application("test").set("pid", testString);
     conf0.folder(testFolder).setForceView(true);
     conf0.folder(testFolder).setForceHide(false);
-    conf0.save("test-config-saved.txt");
-    //system("cat test-config-saved.txt");
+    conf0.save(workfile);
 
     // Load the config file that we just saved
-    config::Config conf1("test-config-saved.txt");
-    ensure_equals(conf1.application("test").get("pid"), testString);
-    ensure_equals(conf1.folder(testFolder).forceview(), true);
-    ensure_equals(conf1.folder(testFolder).forcehide(), false);
-    ensure_equals(conf1.locations().size(), 4u);
-}
+    buffy::config::Config conf1(workfile);
+    wassert(actual(conf1.application("test").get("pid")) == testString);
+    wassert(actual(conf1.folder(testFolder).forceview()) == true);
+    wassert(actual(conf1.folder(testFolder).forcehide()) == false);
+    wassert(actual(conf1.locations().size()) == 4u);
+});
 
-// Loading an empty file should not die
-template<> template<>
-void to::test<7> ()
-{
-    system("rm -f foo.txt; touch foo.txt");
-    config::Config conf("foo.txt");
-}
+add_method("load_empty", []() {
+    sys::Tempdir workdir;
+    std::string testfile = str::joinpath(workdir.name(), "foo.txt");
+    sys::write_file(testfile, std::string());
+    buffy::config::Config conf(testfile);
+});
+
+#if 0
+struct buffy_config_shar {
+    config::Config conf;
+    buffy_config_shar() : conf("nonexisting-config.txt") {
+    }
+    ~buffy_config_shar() {
+        unlink("test-config-saved.txt");
+    }
+};
+
 #endif
 
 }
