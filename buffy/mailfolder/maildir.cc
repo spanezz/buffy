@@ -1,27 +1,6 @@
-/*
- * Maildir folder access
- *
- * Copyright (C) 2004--2013  Enrico Zini <enrico@debian.org>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
- */
-
-#include <buffy/mailfolder/maildir.h>
-#include <buffy/utils/sys.h>
-#include <buffy/utils/string.h>
-#include <buffy/utils/system.h>
+#include "buffy/mailfolder/maildir.h"
+#include "buffy/utils/sys.h"
+#include "buffy/utils/string.h"
 
 #include <sys/types.h>  // stat, opendir, readdir, utimes
 #include <sys/stat.h>   // stat
@@ -29,6 +8,7 @@
 #include <cstring>
 #include <sys/time.h>   // utimes
 
+#include <set>
 #include <cerrno>
 #include <cstring>
 
@@ -256,7 +236,7 @@ static void enumerateSubfolders(
         const std::string& parent,
         const std::string& name,
         MailFolderConsumer& cons,
-        InodeSet seen = InodeSet())
+        std::set<ino_t> seen = std::set<ino_t>())
 {
     try {
         std::unique_ptr<struct stat> st;
@@ -274,7 +254,7 @@ static void enumerateSubfolders(
             return;
 
         // Check that we aren't looping
-        if (seen.has(st->st_ino))
+        if (seen.find(st->st_ino) != seen.end())
             return;
 
         if (isMaildir(parent))
@@ -294,10 +274,12 @@ static void enumerateSubfolders(
             if (dname == "cur") continue;
             if (dname == "new") continue;
 
+            std::set<ino_t> sub = seen;
+            sub.insert(st->st_ino);
             enumerateSubfolders(
                     concat(parent, '/', dname),
                     concat(name, '.', dname),
-                    cons, seen + st->st_ino);
+                    cons, sub);
         }
     } catch (std::exception& e) {
         // FIXME: cerr << e.type() << ": " << e.fullInfo() << endl;
