@@ -37,7 +37,7 @@ target_include_directories(libbuffy PUBLIC ${GLIB_INCLUDE_DIRS} ${ZLIB_INCLUDE_D
 target_compile_options(libbuffy PUBLIC ${GLIB_CFLAGS_OTHER} ${ZLIB_CFLAGS_OTHER})
 
 # buffy program
-file(GLOB BUFFY_SOURCES *.cpp)
+file(GLOB BUFFY_SOURCES *.cpp resources.qrc)
 add_executable(buffy ${BUFFY_SOURCES})
 qt5_use_modules(buffy Core Gui Widgets)
 target_include_directories(buffy PRIVATE ${CMAKE_SOURCE_DIR})
