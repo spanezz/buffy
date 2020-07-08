@@ -38,7 +38,7 @@ public:
     virtual void updateStatistics();
 
     static std::shared_ptr<MailFolder> accessFolder(const std::string& path);
-    static void enumerateFolders(const std::string& dir, MailFolderConsumer& cons);
+    static void enumerateFolders(const std::string& dir, std::function<void(std::shared_ptr<MailFolder>)> cons);
 };
 
 }

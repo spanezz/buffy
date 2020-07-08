@@ -34,25 +34,15 @@ std::shared_ptr<MailFolder> MailFolder::accessFolder(const std::string& path)
 }
 
 
-void MailFolder::enumerateFolders(const std::string& path, Consumer<std::shared_ptr<MailFolder>>& cons)
+void MailFolder::enumerateFolders(const std::string& path, std::function<void(std::shared_ptr<MailFolder>)> cons)
 {
     mailfolder::Mailbox::enumerateFolders(path, cons);
     mailfolder::Maildir::enumerateFolders(path, cons);
 }
 
-class MailFolderCollector : public MailFolderConsumer, public std::vector<std::shared_ptr<MailFolder>>
-{
-public:
-    virtual ~MailFolderCollector() throw () {}
-    virtual void consume(std::shared_ptr<MailFolder> mf)
-    {
-        emplace_back(mf);
-    }
-};
-
 std::vector<std::shared_ptr<MailFolder>> MailFolder::enumerateFolders(const std::string& path)
 {
-    MailFolderCollector res;
-    enumerateFolders(path, res);
+    std::vector<std::shared_ptr<MailFolder>> res;
+    enumerateFolders(path, [&res](std::shared_ptr<MailFolder> f) { res.emplace_back(f); });
     return res;
 }

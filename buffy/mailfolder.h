@@ -21,10 +21,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  */
 
-#include "buffy/utils/consumer.h"
 #include <string>
 #include <vector>
 #include <memory>
+#include <functional>
 
 namespace buffy {
 
@@ -57,15 +57,13 @@ public:
     /**
      * Scan a directory and pass to a Consumer all the folders that are found
      */
-    static void enumerateFolders(const std::string& path, Consumer<std::shared_ptr<MailFolder>>& cons);
+    static void enumerateFolders(const std::string& path, std::function<void(std::shared_ptr<MailFolder>)> cons);
 
     /**
      * Scan a directory and return the folder it contains
      */
     static std::vector<std::shared_ptr<MailFolder>> enumerateFolders(const std::string& path);
 };
-
-typedef Consumer<std::shared_ptr<MailFolder>> MailFolderConsumer;
 
 }
 

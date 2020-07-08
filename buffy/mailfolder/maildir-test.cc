@@ -12,16 +12,6 @@ using namespace buffy::utils;
 
 namespace {
 
-class MailFolderCounter : public buffy::MailFolderConsumer
-{
-    size_t m_count;
-public:
-    MailFolderCounter() : m_count(0) {}
-    void consume(std::shared_ptr<buffy::MailFolder> f) override { ++m_count; }
-    size_t count() const { return m_count; }
-};
-
-
 class Tests : public TestCase
 {
     using TestCase::TestCase;
@@ -52,9 +42,9 @@ add_method("empty", []() {
     wassert(actual(test->getMsgFlagged()) == 0);
     wassert(actual(test->changed()) == false);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Maildir::enumerateFolders(TEST_DATA_DIR "/maildir/empty", counter);
-    wassert(actual(counter.count()) == 1u);
+    unsigned count = 0;
+    buffy::mailfolder::Maildir::enumerateFolders(TEST_DATA_DIR "/maildir/empty", [&](auto) { ++count; });
+    wassert(actual(count) == 1u);
 });
 
 add_method("non_empty", []() {
@@ -76,9 +66,9 @@ add_method("non_empty", []() {
     wassert(actual(test->getMsgFlagged()) == 1);
     wassert(actual(test->changed()) == false);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Maildir::enumerateFolders(TEST_DATA_DIR "/maildir/test", counter);
-    wassert(actual(counter.count()) == 1u);
+    unsigned count = 0;
+    buffy::mailfolder::Maildir::enumerateFolders(TEST_DATA_DIR "/maildir/test", [&](auto) { ++count; });
+    wassert(actual(count) == 1u);
 });
 
 add_method("is_broken_symlink", []() {
@@ -90,9 +80,9 @@ add_method("is_broken_symlink", []() {
     auto test = buffy::mailfolder::Maildir::accessFolder(testfile);
     wassert(actual((bool)test) == false);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Maildir::enumerateFolders(testfile, counter);
-    wassert(actual(counter.count()) == 0u);
+    unsigned count = 0;
+    buffy::mailfolder::Maildir::enumerateFolders(testfile, [&](auto) { ++count; });
+    wassert(actual(count) == 0u);
 });
 
 add_method("contains_broken_symlink", []() {
@@ -105,9 +95,9 @@ add_method("contains_broken_symlink", []() {
     auto test = buffy::mailfolder::Maildir::accessFolder(workdir.name());
     wassert(actual((bool)test) == false);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Maildir::enumerateFolders(workdir.name(), counter);
-    wassert(actual(counter.count()) == 0u);
+    unsigned count = 0;
+    buffy::mailfolder::Maildir::enumerateFolders(workdir.name(), [&](auto) { ++count; });
+    wassert(actual(count) == 0u);
 });
 
 add_method("is_loop_symlink", []() {
@@ -118,9 +108,9 @@ add_method("is_loop_symlink", []() {
     auto test = buffy::mailfolder::Maildir::accessFolder(testfile);
     wassert(actual((bool)test) == false);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Maildir::enumerateFolders(testfile, counter);
-    wassert(actual(counter.count()) == 0u);
+    unsigned count = 0;
+    buffy::mailfolder::Maildir::enumerateFolders(testfile, [&](auto) { ++count; });
+    wassert(actual(count) == 0u);
 });
 
 add_method("contains_loop_symlink", []() {
@@ -134,15 +124,15 @@ add_method("contains_loop_symlink", []() {
     auto test = buffy::mailfolder::Maildir::accessFolder(workdir.name());
     wassert(actual((bool)test) == true);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Maildir::enumerateFolders(workdir.name(), counter);
-    wassert(actual(counter.count()) == 1u);
+    unsigned count = 0;
+    buffy::mailfolder::Maildir::enumerateFolders(workdir.name(), [&](auto) { ++count; });
+    wassert(actual(count) == 1u);
 });
 
 add_method("enumerate", []() {
-    MailFolderCounter counter;
-    buffy::mailfolder::Maildir::enumerateFolders(TEST_DATA_DIR "/maildir", counter);
-    wassert(actual(counter.count()) == 4u);
+    unsigned count = 0;
+    buffy::mailfolder::Maildir::enumerateFolders(TEST_DATA_DIR "/maildir", [&](auto) { ++count; });
+    wassert(actual(count) == 4u);
 });
 
 }

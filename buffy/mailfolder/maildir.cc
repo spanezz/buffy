@@ -235,7 +235,7 @@ std::shared_ptr<MailFolder> Maildir::accessFolder(const std::string& path)
 static void enumerateSubfolders(
         const std::string& parent,
         const std::string& name,
-        MailFolderConsumer& cons,
+        std::function<void(std::shared_ptr<MailFolder>)> cons,
         std::set<ino_t> seen = std::set<ino_t>())
 {
     try {
@@ -258,7 +258,7 @@ static void enumerateSubfolders(
             return;
 
         if (isMaildir(parent))
-            cons.consume(std::make_shared<Maildir>(name, parent));
+            cons(std::make_shared<Maildir>(name, parent));
 
         // Recursively enumerate the Maildirs in the directory
         sys::Path dir(parent);
@@ -283,7 +283,7 @@ static void enumerateSubfolders(
     }
 }
 
-void Maildir::enumerateFolders(const std::string& parent, MailFolderConsumer& cons)
+void Maildir::enumerateFolders(const std::string& parent, std::function<void(std::shared_ptr<MailFolder>)> cons)
 {
     // Remove trailing slash from the parent directory
     // The root name is empty if parent is not a maildir

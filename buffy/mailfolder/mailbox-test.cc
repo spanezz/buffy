@@ -12,16 +12,6 @@ using namespace buffy::utils;
 
 namespace {
 
-class MailFolderCounter : public buffy::MailFolderConsumer
-{
-    size_t m_count;
-public:
-    MailFolderCounter() : m_count(0) {}
-    void consume(std::shared_ptr<buffy::MailFolder> f) override { ++m_count; }
-    size_t count() const { return m_count; }
-};
-
-
 class Tests : public TestCase
 {
     using TestCase::TestCase;
@@ -53,9 +43,9 @@ add_method("empty", []() {
     wassert(actual(test->getMsgFlagged()) == 0);
     wassert(actual(test->changed()) == false);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Mailbox::enumerateFolders(TEST_DATA_DIR "/mbox/empty.mbox", counter);
-    wassert(actual(counter.count()) == 1u);
+    unsigned count = 0;
+    buffy::mailfolder::Mailbox::enumerateFolders(TEST_DATA_DIR "/mbox/empty.mbox", [&](auto) { ++count; });
+    wassert(actual(count) == 1u);
 });
 
 add_method("non_empty", []() {
@@ -78,9 +68,9 @@ add_method("non_empty", []() {
     wassert(actual(test->getMsgFlagged()) == 1);
     wassert(actual(test->changed()) == false);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Mailbox::enumerateFolders(TEST_DATA_DIR "/mbox/test.mbox", counter);
-    wassert(actual(counter.count()) == 1u);
+    unsigned count = 0;
+    buffy::mailfolder::Mailbox::enumerateFolders(TEST_DATA_DIR "/mbox/test.mbox", [&](auto) { ++count; });
+    wassert(actual(count) == 1u);
 });
 
 add_method("broken_symlink", []() {
@@ -92,16 +82,16 @@ add_method("broken_symlink", []() {
     auto test = buffy::mailfolder::Mailbox::accessFolder(testfile);
     wassert_false((bool)test);
 
-    MailFolderCounter counter;
-    buffy::mailfolder::Mailbox::enumerateFolders(testfile, counter);
-    wassert(actual(counter.count()) == 0u);
+    unsigned count = 0;
+    buffy::mailfolder::Mailbox::enumerateFolders(testfile, [&](auto) { ++count; });
+    wassert(actual(count) == 0u);
 });
 
 add_method("enumerate", []() {
     // Check enumeration of a directory with mailboxes
-    MailFolderCounter counter;
-    buffy::mailfolder::Mailbox::enumerateFolders(TEST_DATA_DIR "/mbox", counter);
-    wassert(actual(counter.count()) == 2u);
+    unsigned count = 0;
+    buffy::mailfolder::Mailbox::enumerateFolders(TEST_DATA_DIR "/mbox", [&](auto) { ++count; });
+    wassert(actual(count) == 2u);
 });
 
 }

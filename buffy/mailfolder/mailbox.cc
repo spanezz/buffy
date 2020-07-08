@@ -260,7 +260,7 @@ std::shared_ptr<MailFolder> Mailbox::accessFolder(const std::string& path)
 }
 
 
-void Mailbox::enumerateFolders(const std::string& parent, MailFolderConsumer& cons)
+void Mailbox::enumerateFolders(const std::string& parent, std::function<void(std::shared_ptr<MailFolder>)> cons)
 {
     // Perform consistency checks on the parent directory
     struct stat st;
@@ -269,7 +269,7 @@ void Mailbox::enumerateFolders(const std::string& parent, MailFolderConsumer& co
 //      throw SystemException(errno, "getting informations on " + parent);
 
     if (isMailbox(parent))
-        cons.consume(std::make_shared<Mailbox>(parent));
+        cons(std::make_shared<Mailbox>(parent));
 
     if (S_ISDIR(st.st_mode) == 0)
         return;
@@ -291,7 +291,7 @@ void Mailbox::enumerateFolders(const std::string& parent, MailFolderConsumer& co
             continue;
         std::shared_ptr<MailFolder> f(accessFolder(candidate));
         if (f)
-            cons.consume(f);
+            cons(f);
     }
 }
 
