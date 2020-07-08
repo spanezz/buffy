@@ -1,12 +1,9 @@
 #include "buffy.h"
 #include "tray.h"
 #include <QApplication>
-#include <QDBusConnection>
-#include <QDBusInterface>
 #include <QCommandLineParser>
 #include <QDebug>
 #include "folders.h"
-#include "dbus.h"
 #include <iostream>
 
 using namespace buffy;
@@ -16,7 +13,6 @@ struct Main
 {
     QApplication app;
     QCommandLineParser cmdline;
-    QDBusInterface* remote_buffy = 0;
     QCommandLineOption set_active_inbox;
     QCommandLineOption unset_active_inbox;
 
@@ -32,20 +28,9 @@ struct Main
         cmdline.addOption(set_active_inbox);
         cmdline.addOption(unset_active_inbox);
         cmdline.process(app);
-
-        if (QDBusConnection::sessionBus().isConnected())
-        {
-            remote_buffy = new QDBusInterface("org.enricozini.buffy", "/buffy", "org.enricozini.buffy", QDBusConnection::sessionBus());
-            if (!remote_buffy->isValid())
-            {
-                delete remote_buffy;
-                remote_buffy = 0;
-            }
-        }
     }
     ~Main()
     {
-        if (remote_buffy) delete remote_buffy;
     }
 
     int run_gui()
@@ -64,38 +49,12 @@ struct Main
         Tray tray(folders, w);
         tray.show();
 
-        BuffyServer server(app, w);
-        QDBusConnection::sessionBus().registerService("org.enricozini.buffy");
-        QDBusConnection::sessionBus().registerObject("/buffy", &app);
         return app.exec();
-    }
-
-    void require_remote_buffy()
-    {
-        if (!remote_buffy)
-        {
-            cerr << "Buffy is not running" << endl;
-            exit(1);
-        }
     }
 };
 
 int main(int argc, char *argv[])
 {
     Main main(argc, argv);
-
-    if (main.cmdline.isSet(main.set_active_inbox))
-    {
-        main.require_remote_buffy();
-        main.remote_buffy->call("set_active_inbox", main.cmdline.value(main.set_active_inbox), true);
-        return 0;
-    } else if (main.cmdline.isSet(main.unset_active_inbox)) {
-        main.require_remote_buffy();
-        main.remote_buffy->call("set_active_inbox", main.cmdline.value(main.unset_active_inbox), false);
-        return 0;
-    } else if (main.remote_buffy) {
-        main.remote_buffy->call("set_visible", true);
-        return 0;
-    } else
-        return main.run_gui();
+    return main.run_gui();
 }

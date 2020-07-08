@@ -49,6 +49,8 @@ void Tray::tray_activated(QSystemTrayIcon::ActivationReason reason)
             }
             break;
         }
+        default:
+            break;
     }
 }
 
