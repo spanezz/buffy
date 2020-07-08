@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QStandardItemModel>
-#include <buffy/config/config.h>
+#include <buffy/config.h>
 
 namespace Ui {
 class Preferences;

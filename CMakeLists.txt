@@ -22,7 +22,7 @@ set(CMAKE_AUTORCC ON)
 
 add_compile_options(-fdiagnostics-color=always -Wformat=2 -Wall -Wextra -Wno-unused-parameter)
 
-file(GLOB BUFFY_SOURCES *.cpp buffy/*.cc buffy/config/*.cc buffy/mailfolder/*.cc buffy/utils/*.cc)
+file(GLOB BUFFY_SOURCES *.cpp buffy/*.cc buffy/mailfolder/*.cc buffy/utils/*.cc)
 list(FILTER BUFFY_SOURCES EXCLUDE REGEX -tut\.cc$)
 list(FILTER BUFFY_SOURCES EXCLUDE REGEX test.+\.cc$)
 
