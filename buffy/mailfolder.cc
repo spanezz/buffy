@@ -25,11 +25,6 @@
 using namespace std;
 using namespace buffy;
 
-//void MailFolder::enumerateFoldersSwig(const char* path, Consumer<MailFolder>& cons)
-//{
-//  return MailFolder::enumerateFolders(path, cons);
-//}
-
 MailFolder MailFolder::accessFolder(const std::string& path)
 {
     MailFolder res = mailfolder::Mailbox::accessFolder(path);
@@ -41,11 +36,8 @@ MailFolder MailFolder::accessFolder(const std::string& path)
 
 void MailFolder::enumerateFolders(const std::string& path, Consumer<MailFolder>& cons)
 {
-//  fprintf(stderr, "enumerating mailboxes\n");
     mailfolder::Mailbox::enumerateFolders(path, cons);
-//  fprintf(stderr, "enumerating maildirs\n");
     mailfolder::Maildir::enumerateFolders(path, cons);
-//  fprintf(stderr, "enumerated\n");
 }
 
 class MailFolderCollector : public MailFolderConsumer, public vector<MailFolder>
@@ -64,5 +56,3 @@ vector<MailFolder> MailFolder::enumerateFolders(const std::string& path)
     enumerateFolders(path, res);
     return res;
 }
-
-// vim:set ts=4 sw=4:

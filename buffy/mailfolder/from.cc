@@ -18,13 +18,14 @@
 
 /* Slightly modified version from Mutt 0.94.4i */
 
-#include <buffy/utils/from.h>
-#include <ctype.h>
-#include <string.h>
-#include <time.h>
-#include <stdio.h>
+#include "from.h"
+#include <cctype>
+#include <cstring>
+#include <ctime>
+#include <cstdio>
 
 namespace buffy {
+namespace mailfolder {
 
 #define ISSPACE(c) isspace((unsigned char)c)
 #define SKIPWS(c) while (*(c) && isspace ((unsigned char) *(c))) c++;
@@ -197,4 +198,5 @@ int is_from (const char *s, char *path, size_t pathlen)
   return 1;
 }
 
+}
 }
