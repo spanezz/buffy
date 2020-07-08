@@ -66,7 +66,6 @@ public:
 };
 
 typedef Consumer<std::shared_ptr<MailFolder>> MailFolderConsumer;
-typedef Filter<std::shared_ptr<MailFolder>> MailFolderFilter;
 
 }
 
