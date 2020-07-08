@@ -1,0 +1,319 @@
+From madduck@cirrus.madduck.net Wed Sep  1 11:13:01 2004
+Return-Path: <madduck@cirrus.madduck.net>
+X-Original-To: enrico@enricozini.org
+Delivered-To: enrico@enricozini.org
+Received: from localhost (localhost [127.0.0.1])
+	by eddie.casa (Postfix) with ESMTP id 88FF959AD2
+	for <enrico@enricozini.org>; Wed,  1 Sep 2004 11:13:01 +0200 (CEST)
+Received: from eddie.casa ([127.0.0.1])
+	by localhost (eddie [127.0.0.1]) (amavisd-new, port 10024) with LMTP
+	id 31380-01 for <enrico@enricozini.org>;
+	Wed, 1 Sep 2004 11:12:54 +0200 (CEST)
+Received: from pob.cs.unibo.it (pob.cs.unibo.it [130.136.10.114])
+	by eddie.casa (Postfix) with ESMTP id D41F44FCF1
+	for <enrico@enricozini.org>; Wed,  1 Sep 2004 11:12:53 +0200 (CEST)
+Received: by pob.cs.unibo.it (Postfix)
+	id 6F7B32A54C; Wed,  1 Sep 2004 11:12:53 +0200 (CEST)
+Delivered-To: zinie@cs.unibo.it
+Received: from lea.cs.unibo.it (backlea.cs.unibo.it [130.136.10.101])
+	by pob.cs.unibo.it (Postfix) with ESMTP id 46D5D2A54B
+	for <zinie@cs.unibo.it>; Wed,  1 Sep 2004 11:12:53 +0200 (CEST)
+Received: from master.debian.org (master.debian.org [146.82.138.7])
+	by lea.cs.unibo.it (Postfix) with ESMTP id F3BE58B926
+	for <zinie@cs.unibo.it>; Wed,  1 Sep 2004 11:12:52 +0200 (CEST)
+Received: from armagnac.ifi.unizh.ch (albatross.madduck.net) [130.60.75.72] 
+	by master.debian.org with esmtp (Exim 3.35 1 (Debian))
+	id 1C2RAh-0003xM-00; Wed, 01 Sep 2004 04:12:52 -0500
+Received: from localhost (albatross.madduck.net [127.0.0.1])
+	by albatross.madduck.net (postfix) with ESMTP id 63AE5B0AC
+	for <enrico@debian.org>; Wed,  1 Sep 2004 11:12:45 +0200 (CEST)
+Received: from localhost (80-219-173-32.dclient.hispeed.ch [80.219.173.32])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(Client CN "cirrus.madduck.net", Issuer "madduck.net CA" (verified OK))
+	by albatross.madduck.net (postfix) with ESMTP id 0DFE8B05B
+	for <enrico@debian.org>; Wed,  1 Sep 2004 11:12:44 +0200 (CEST)
+Received: by localhost (Postfix, from userid 1000)
+	id 92357212EF9; Wed,  1 Sep 2004 11:12:44 +0200 (CEST)
+Date: Wed, 1 Sep 2004 11:12:44 +0200
+From: martin f krafft <madduck@debian.org>
+To: enrico@debian.org
+Subject: buffy suggestions
+Message-ID: <20040901091244.GA32195@cirrus.madduck.net>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="CE+1k2dSO48ffgeK"
+Content-Disposition: inline
+Organization: Debian GNU/Linux
+X-OS: Debian GNU/Linux 3.1 kernel 2.6.8-1-k7 i686
+X-Motto: Keep the good times rollin'
+X-Subliminal-Message: debian/rules!
+User-Agent: Mutt/1.5.6+20040722i
+X-Virus-Scanned: by albatross.madduck.net
+X-Virus-Scanned: by amavisd-new-20030616-p10 (Debian) at uncasino.it
+Status: RO
+X-Status: F
+Content-Length: 2084
+
+
+--CE+1k2dSO48ffgeK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Enrico,
+
+I've long been playing with ideas to make something similar to
+buffy, and now you beat me to it. May I suggest the following things
+for a future version?
+
+1. It would be great if buffy could display mailboxes that have
+   changed as bold and allow the user to clear the bold flag (e.g.
+   middle mouse button), similar to what xbuffy does.
+
+2. It would be great to have a mode starting with an empty list and
+   then adding mailbox lines as they come in. So if I get a message
+   to debian, buffy prepends (or appends, should be configurable)
+   a line for the debian mailbox to the end. If I get a mail for the
+   university, the uni mailbox appears above the debian mailbox. if
+   now another debian mail comes in, debian moves to the top again.
+   This should be configurable.
+
+3. Can the GTK window be skinned to have it take up very little
+   space on the desktop, like xbuffy? I think this would combine great
+   with point 2.
+  =20
+4. buffy should honour mutt's mailbox settings, as i reported in the
+   bug.
+
+5. it would be great if maildirs could be scanned recursively for
+   other maildirs, and the results presented in a threaded view if
+   possible.
+
+That's all for now. If I can think of other things, I will let you
+know.
+
+Great to see buffy. Thanks!
+
+--=20
+Please do not CC me when replying to lists; I read them!
+=20
+ .''`.     martin f. krafft <madduck@debian.org>
+: :'  :    proud Debian developer, admin, and user
+`. `'`
+  `-  Debian - when you have better things to do than fixing a system
+=20
+Invalid/expired PGP subkeys? Use subkeys.pgp.net as keyserver!
+
+--CE+1k2dSO48ffgeK
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+
+iD8DBQFBNZKMIgvIgzMMSnURAr9jAJ9Qs6LZO9MYK2KNuH4QAjTrYhFH2QCgyeX7
+1BoNjjttI2Vu3g1cthjnMaM=
+=mQY8
+-----END PGP SIGNATURE-----
+
+--CE+1k2dSO48ffgeK--
+
+From buffy-devel-admin@lists.alioth.debian.org Sun Feb 27 19:47:32 2005
+Return-Path: <buffy-devel-admin@lists.alioth.debian.org>
+X-Original-To: enrico@enricozini.org
+Delivered-To: enrico@enricozini.org
+Received: from localhost (localhost [127.0.0.1])
+	by eddie.casa (Postfix) with ESMTP id B74ED58AB8
+	for <enrico@enricozini.org>; Sun, 27 Feb 2005 19:47:32 +0100 (CET)
+Received: from eddie.casa ([127.0.0.1])
+	by localhost (eddie [127.0.0.1]) (amavisd-new, port 10024) with LMTP
+	id 24093-01 for <enrico@enricozini.org>;
+	Sun, 27 Feb 2005 19:47:26 +0100 (CET)
+Received: from master.debian.org (master.debian.org [146.82.138.7])
+	by eddie.casa (Postfix) with ESMTP id DA4A758A67
+	for <enrico@enricozini.org>; Sun, 27 Feb 2005 19:47:25 +0100 (CET)
+Received: from haydn.debian.org [192.25.206.28] 
+	by master.debian.org with esmtp (Exim 3.35 1 (Debian))
+	id 1D5TRo-0003N1-00; Sun, 27 Feb 2005 12:47:20 -0600
+Received: from localhost ([127.0.0.1]:59804 helo=haydn.debian.org)
+	by haydn.debian.org with esmtp (Exim 4.34)
+	id 1D5TRi-0003tR-RN; Sun, 27 Feb 2005 11:47:19 -0700
+Received: from vsmtp14.tin.it ([212.216.176.118]:34879)
+	by haydn.debian.org with esmtp (Exim 4.34)
+	id 1D5TNt-0007Sf-OA
+	for buffy-devel@lists.alioth.debian.org; Sun, 27 Feb 2005 11:46:02 -0700
+Received: from tannoiser.sytes.net (80.116.26.176) by vsmtp14.tin.it (7.0.027)
+        id 420DF956006E7E9F for buffy-devel@lists.alioth.debian.org; Sun, 27 Feb 2005 19:36:32 +0100
+Received: by tannoiser.sytes.net (Postfix, from userid 1000)
+	id 2DA4B85CA; Sun, 27 Feb 2005 19:36:32 +0100 (CET)
+From: Maurizio Lemmo - Tannoiser <tannoiser@tenzione.it>
+To: buffy-devel@lists.alioth.debian.org
+Message-ID: <20050227183632.GA5547@tannoiser.sytes.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.3.28i
+X-Operating-System: Linux 2.4.18 on gate
+X-Organization: A lot :-)
+Subject: [Buffy-devel] cosmetic web stuff
+Sender: buffy-devel-admin@lists.alioth.debian.org
+Errors-To: buffy-devel-admin@lists.alioth.debian.org
+X-BeenThere: buffy-devel@lists.alioth.debian.org
+X-Mailman-Version: 2.0.11
+Precedence: bulk
+List-Help: <mailto:buffy-devel-request@lists.alioth.debian.org?subject=help>
+List-Post: <mailto:buffy-devel@lists.alioth.debian.org>
+List-Subscribe: <http://lists.alioth.debian.org/mailman/listinfo/buffy-devel>,
+	<mailto:buffy-devel-request@lists.alioth.debian.org?subject=subscribe>
+List-Id: Buffy development <buffy-devel.lists.alioth.debian.org>
+List-Unsubscribe: <http://lists.alioth.debian.org/mailman/listinfo/buffy-devel>,
+	<mailto:buffy-devel-request@lists.alioth.debian.org?subject=unsubscribe>
+List-Archive: <http://lists.alioth.debian.org/pipermail/buffy-devel/>
+Date: Sun, 27 Feb 2005 19:36:32 +0100
+X-SA-Exim-Connect-IP: 127.0.0.1
+X-Virus-Scanned: by amavisd-new-20030616-p10 (Debian) at uncasino.it
+Status: RO
+Content-Length: 905
+
+Of course, it isn't urgent, but I notice 2 minor issue:
+
+* when commit buffy-web stuff, there was a script (suppose), that put
+file online. I suppose that in recent alioth->svn switch it's wipe out.
+
+* the "browse online" (http://svn.debian.org/viewcvs/buffy) link is
+broken. Again i suppose is a side-effect from the mentioned switch.
+
+I don't know exactly were (and if I may, with my default privilege in
+alioth) put hands to fix this little (but annoying) stuff.
+
+-- 
+                          Maurizio - Tannoiser - Lemmo
+                 Founder Member of ERLUG http://erlug.linux.it
+-------------------------------------------------------------------------------
+BOFH excuse #279:
+
+The static electricity routing is acting up...
+
+_______________________________________________
+Buffy-devel mailing list
+Buffy-devel@lists.alioth.debian.org
+http://lists.alioth.debian.org/mailman/listinfo/buffy-devel
+
+From buffy-devel-admin@lists.alioth.debian.org Sat Feb 26 15:27:20 2005
+Return-Path: <buffy-devel-admin@lists.alioth.debian.org>
+X-Original-To: enrico@enricozini.org
+Delivered-To: enrico@enricozini.org
+Received: from localhost (localhost [127.0.0.1])
+	by eddie.casa (Postfix) with ESMTP id 6ED7B54E8A
+	for <enrico@enricozini.org>; Sat, 26 Feb 2005 15:27:20 +0100 (CET)
+Received: from eddie.casa ([127.0.0.1])
+	by localhost (eddie [127.0.0.1]) (amavisd-new, port 10024) with LMTP
+	id 17646-02 for <enrico@enricozini.org>;
+	Sat, 26 Feb 2005 15:27:14 +0100 (CET)
+Received: from master.debian.org (master.debian.org [146.82.138.7])
+	by eddie.casa (Postfix) with ESMTP id 371CD54E77
+	for <enrico@enricozini.org>; Sat, 26 Feb 2005 15:27:14 +0100 (CET)
+Received: from haydn.debian.org [192.25.206.28] 
+	by master.debian.org with esmtp (Exim 3.35 1 (Debian))
+	id 1D52uT-0000ww-00; Sat, 26 Feb 2005 08:27:09 -0600
+Received: from localhost ([127.0.0.1]:60062 helo=haydn.debian.org)
+	by haydn.debian.org with esmtp (Exim 4.34)
+	id 1D52uR-0004eW-G3; Sat, 26 Feb 2005 07:27:08 -0700
+Received: from mid-2.inet.it ([213.92.5.19]:47815)
+	by haydn.debian.org with esmtp (Exim 4.34)
+	id 1D52s8-0004cG-Vw
+	for buffy-devel@lists.alioth.debian.org; Sat, 26 Feb 2005 07:26:18 -0700
+Received: from 81-174-12-206.f5.ngi.it [::ffff:81.174.12.206] by mid-2.inet.it via I-SMTP-5.2.3-520
+	id ::ffff:81.174.12.206+Dvh31dJnhBN; Sat, 26 Feb 2005 15:24:40 +0100
+Received: from localhost (localhost [127.0.0.1])
+	by eddie.casa (Postfix) with ESMTP id 51FCD54E8B
+	for <buffy-devel@lists.alioth.debian.org>; Sat, 26 Feb 2005 15:24:39 +0100 (CET)
+Received: from eddie.casa ([127.0.0.1])
+	by localhost (eddie [127.0.0.1]) (amavisd-new, port 10024) with LMTP
+	id 16715-04 for <buffy-devel@lists.alioth.debian.org>;
+	Sat, 26 Feb 2005 15:24:35 +0100 (CET)
+Received: from marvin.casa (marvin.casa [192.168.1.2])
+	by eddie.casa (Postfix) with ESMTP id A395B54E87
+	for <buffy-devel@lists.alioth.debian.org>; Sat, 26 Feb 2005 15:24:35 +0100 (CET)
+Received: from enrico by marvin.casa with local (Exim 3.36 #1 (Debian))
+	id 1D52s4-0005UU-00
+	for <buffy-devel@lists.alioth.debian.org>; Sat, 26 Feb 2005 15:24:40 +0100
+From: Enrico Zini <enrico@enricozini.org>
+To: buffy-devel@lists.alioth.debian.org
+Message-ID: <20050226142440.GA22201@marvin.casa>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="IJpNTDwzlM2Ie8A6"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.6+20040907i
+X-Virus-Scanned: by amavisd-new-20030616-p10 (Debian) at uncasino.it
+Subject: [Buffy-devel] Ready to release?
+Sender: buffy-devel-admin@lists.alioth.debian.org
+Errors-To: buffy-devel-admin@lists.alioth.debian.org
+X-BeenThere: buffy-devel@lists.alioth.debian.org
+X-Mailman-Version: 2.0.11
+Precedence: bulk
+List-Help: <mailto:buffy-devel-request@lists.alioth.debian.org?subject=help>
+List-Post: <mailto:buffy-devel@lists.alioth.debian.org>
+List-Subscribe: <http://lists.alioth.debian.org/mailman/listinfo/buffy-devel>,
+	<mailto:buffy-devel-request@lists.alioth.debian.org?subject=subscribe>
+List-Id: Buffy development <buffy-devel.lists.alioth.debian.org>
+List-Unsubscribe: <http://lists.alioth.debian.org/mailman/listinfo/buffy-devel>,
+	<mailto:buffy-devel-request@lists.alioth.debian.org?subject=unsubscribe>
+List-Archive: <http://lists.alioth.debian.org/pipermail/buffy-devel/>
+Date: Sat, 26 Feb 2005 15:24:40 +0100
+X-SA-Exim-Connect-IP: 127.0.0.1
+X-Virus-Scanned: by amavisd-new-20030616-p10 (Debian) at uncasino.it
+Status: RO
+Content-Length: 1244
+
+
+--IJpNTDwzlM2Ie8A6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+Hello,
+
+I tested the new libbuffy-based buffy and added recursive scanning of
+maildirs.  Together with Martin's patch and Martin's menu file, we fix
+three bugs with very minimal changes, and we move to libbuffy.
+
+I'm testing it:
+
+ - The buffy interface works for me.
+ - /usr/share/doc/python-buffy/examples/basic.py works for me.
+ - basic.py with the extra features uncommented, needs extra checking,
+   but that is not vital to the release.
+
+Please have a look at it, test it, see how it goes: I think we have
+enough for a release.
+
+
+Ciao,
+
+Enrico
+
+--
+GPG key: 1024D/797EBFAB 2000-12-05 Enrico Zini <enrico@enricozini.org>
+
+--IJpNTDwzlM2Ie8A6
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.0 (GNU/Linux)
+
+iD8DBQFCIIao9LSwzHl+v6sRAnexAJwP+wNBc3Mmw3O+zo/D0UOZ8MprcwCbBYcn
+kXVq4ZUepSuyjZrwfpwNLZo=
+=MR2K
+-----END PGP SIGNATURE-----
+
+--IJpNTDwzlM2Ie8A6--
+
+_______________________________________________
+Buffy-devel mailing list
+Buffy-devel@lists.alioth.debian.org
+http://lists.alioth.debian.org/mailman/listinfo/buffy-devel
+

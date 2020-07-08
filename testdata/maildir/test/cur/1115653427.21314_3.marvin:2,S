@@ -1,0 +1,115 @@
+Return-Path: <buffy-devel-admin@lists.alioth.debian.org>
+X-Original-To: enrico@enricozini.org
+Delivered-To: enrico@enricozini.org
+Received: from localhost (localhost [127.0.0.1])
+	by eddie.casa (Postfix) with ESMTP id 6ED7B54E8A
+	for <enrico@enricozini.org>; Sat, 26 Feb 2005 15:27:20 +0100 (CET)
+Received: from eddie.casa ([127.0.0.1])
+	by localhost (eddie [127.0.0.1]) (amavisd-new, port 10024) with LMTP
+	id 17646-02 for <enrico@enricozini.org>;
+	Sat, 26 Feb 2005 15:27:14 +0100 (CET)
+Received: from master.debian.org (master.debian.org [146.82.138.7])
+	by eddie.casa (Postfix) with ESMTP id 371CD54E77
+	for <enrico@enricozini.org>; Sat, 26 Feb 2005 15:27:14 +0100 (CET)
+Received: from haydn.debian.org [192.25.206.28] 
+	by master.debian.org with esmtp (Exim 3.35 1 (Debian))
+	id 1D52uT-0000ww-00; Sat, 26 Feb 2005 08:27:09 -0600
+Received: from localhost ([127.0.0.1]:60062 helo=haydn.debian.org)
+	by haydn.debian.org with esmtp (Exim 4.34)
+	id 1D52uR-0004eW-G3; Sat, 26 Feb 2005 07:27:08 -0700
+Received: from mid-2.inet.it ([213.92.5.19]:47815)
+	by haydn.debian.org with esmtp (Exim 4.34)
+	id 1D52s8-0004cG-Vw
+	for buffy-devel@lists.alioth.debian.org; Sat, 26 Feb 2005 07:26:18 -0700
+Received: from 81-174-12-206.f5.ngi.it [::ffff:81.174.12.206] by mid-2.inet.it via I-SMTP-5.2.3-520
+	id ::ffff:81.174.12.206+Dvh31dJnhBN; Sat, 26 Feb 2005 15:24:40 +0100
+Received: from localhost (localhost [127.0.0.1])
+	by eddie.casa (Postfix) with ESMTP id 51FCD54E8B
+	for <buffy-devel@lists.alioth.debian.org>; Sat, 26 Feb 2005 15:24:39 +0100 (CET)
+Received: from eddie.casa ([127.0.0.1])
+	by localhost (eddie [127.0.0.1]) (amavisd-new, port 10024) with LMTP
+	id 16715-04 for <buffy-devel@lists.alioth.debian.org>;
+	Sat, 26 Feb 2005 15:24:35 +0100 (CET)
+Received: from marvin.casa (marvin.casa [192.168.1.2])
+	by eddie.casa (Postfix) with ESMTP id A395B54E87
+	for <buffy-devel@lists.alioth.debian.org>; Sat, 26 Feb 2005 15:24:35 +0100 (CET)
+Received: from enrico by marvin.casa with local (Exim 3.36 #1 (Debian))
+	id 1D52s4-0005UU-00
+	for <buffy-devel@lists.alioth.debian.org>; Sat, 26 Feb 2005 15:24:40 +0100
+From: Enrico Zini <enrico@enricozini.org>
+To: buffy-devel@lists.alioth.debian.org
+Message-ID: <20050226142440.GA22201@marvin.casa>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="IJpNTDwzlM2Ie8A6"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.6+20040907i
+X-Virus-Scanned: by amavisd-new-20030616-p10 (Debian) at uncasino.it
+Subject: [Buffy-devel] Ready to release?
+Sender: buffy-devel-admin@lists.alioth.debian.org
+Errors-To: buffy-devel-admin@lists.alioth.debian.org
+X-BeenThere: buffy-devel@lists.alioth.debian.org
+X-Mailman-Version: 2.0.11
+Precedence: bulk
+List-Help: <mailto:buffy-devel-request@lists.alioth.debian.org?subject=help>
+List-Post: <mailto:buffy-devel@lists.alioth.debian.org>
+List-Subscribe: <http://lists.alioth.debian.org/mailman/listinfo/buffy-devel>,
+	<mailto:buffy-devel-request@lists.alioth.debian.org?subject=subscribe>
+List-Id: Buffy development <buffy-devel.lists.alioth.debian.org>
+List-Unsubscribe: <http://lists.alioth.debian.org/mailman/listinfo/buffy-devel>,
+	<mailto:buffy-devel-request@lists.alioth.debian.org?subject=unsubscribe>
+List-Archive: <http://lists.alioth.debian.org/pipermail/buffy-devel/>
+Date: Sat, 26 Feb 2005 15:24:40 +0100
+X-SA-Exim-Connect-IP: 127.0.0.1
+X-Virus-Scanned: by amavisd-new-20030616-p10 (Debian) at uncasino.it
+Content-Length: 1244
+Lines: 48
+
+
+--IJpNTDwzlM2Ie8A6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+Hello,
+
+I tested the new libbuffy-based buffy and added recursive scanning of
+maildirs.  Together with Martin's patch and Martin's menu file, we fix
+three bugs with very minimal changes, and we move to libbuffy.
+
+I'm testing it:
+
+ - The buffy interface works for me.
+ - /usr/share/doc/python-buffy/examples/basic.py works for me.
+ - basic.py with the extra features uncommented, needs extra checking,
+   but that is not vital to the release.
+
+Please have a look at it, test it, see how it goes: I think we have
+enough for a release.
+
+
+Ciao,
+
+Enrico
+
+--
+GPG key: 1024D/797EBFAB 2000-12-05 Enrico Zini <enrico@enricozini.org>
+
+--IJpNTDwzlM2Ie8A6
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.0 (GNU/Linux)
+
+iD8DBQFCIIao9LSwzHl+v6sRAnexAJwP+wNBc3Mmw3O+zo/D0UOZ8MprcwCbBYcn
+kXVq4ZUepSuyjZrwfpwNLZo=
+=MR2K
+-----END PGP SIGNATURE-----
+
+--IJpNTDwzlM2Ie8A6--
+
+_______________________________________________
+Buffy-devel mailing list
+Buffy-devel@lists.alioth.debian.org
+http://lists.alioth.debian.org/mailman/listinfo/buffy-devel

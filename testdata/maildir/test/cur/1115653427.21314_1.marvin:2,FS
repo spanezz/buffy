@@ -1,0 +1,118 @@
+Return-Path: <madduck@cirrus.madduck.net>
+X-Original-To: enrico@enricozini.org
+Delivered-To: enrico@enricozini.org
+Received: from localhost (localhost [127.0.0.1])
+	by eddie.casa (Postfix) with ESMTP id 88FF959AD2
+	for <enrico@enricozini.org>; Wed,  1 Sep 2004 11:13:01 +0200 (CEST)
+Received: from eddie.casa ([127.0.0.1])
+	by localhost (eddie [127.0.0.1]) (amavisd-new, port 10024) with LMTP
+	id 31380-01 for <enrico@enricozini.org>;
+	Wed, 1 Sep 2004 11:12:54 +0200 (CEST)
+Received: from pob.cs.unibo.it (pob.cs.unibo.it [130.136.10.114])
+	by eddie.casa (Postfix) with ESMTP id D41F44FCF1
+	for <enrico@enricozini.org>; Wed,  1 Sep 2004 11:12:53 +0200 (CEST)
+Received: by pob.cs.unibo.it (Postfix)
+	id 6F7B32A54C; Wed,  1 Sep 2004 11:12:53 +0200 (CEST)
+Delivered-To: zinie@cs.unibo.it
+Received: from lea.cs.unibo.it (backlea.cs.unibo.it [130.136.10.101])
+	by pob.cs.unibo.it (Postfix) with ESMTP id 46D5D2A54B
+	for <zinie@cs.unibo.it>; Wed,  1 Sep 2004 11:12:53 +0200 (CEST)
+Received: from master.debian.org (master.debian.org [146.82.138.7])
+	by lea.cs.unibo.it (Postfix) with ESMTP id F3BE58B926
+	for <zinie@cs.unibo.it>; Wed,  1 Sep 2004 11:12:52 +0200 (CEST)
+Received: from armagnac.ifi.unizh.ch (albatross.madduck.net) [130.60.75.72] 
+	by master.debian.org with esmtp (Exim 3.35 1 (Debian))
+	id 1C2RAh-0003xM-00; Wed, 01 Sep 2004 04:12:52 -0500
+Received: from localhost (albatross.madduck.net [127.0.0.1])
+	by albatross.madduck.net (postfix) with ESMTP id 63AE5B0AC
+	for <enrico@debian.org>; Wed,  1 Sep 2004 11:12:45 +0200 (CEST)
+Received: from localhost (80-219-173-32.dclient.hispeed.ch [80.219.173.32])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(Client CN "cirrus.madduck.net", Issuer "madduck.net CA" (verified OK))
+	by albatross.madduck.net (postfix) with ESMTP id 0DFE8B05B
+	for <enrico@debian.org>; Wed,  1 Sep 2004 11:12:44 +0200 (CEST)
+Received: by localhost (Postfix, from userid 1000)
+	id 92357212EF9; Wed,  1 Sep 2004 11:12:44 +0200 (CEST)
+Date: Wed, 1 Sep 2004 11:12:44 +0200
+From: martin f krafft <madduck@debian.org>
+To: enrico@debian.org
+Subject: buffy suggestions
+Message-ID: <20040901091244.GA32195@cirrus.madduck.net>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="CE+1k2dSO48ffgeK"
+Content-Disposition: inline
+Organization: Debian GNU/Linux
+X-OS: Debian GNU/Linux 3.1 kernel 2.6.8-1-k7 i686
+X-Motto: Keep the good times rollin'
+X-Subliminal-Message: debian/rules!
+User-Agent: Mutt/1.5.6+20040722i
+X-Virus-Scanned: by albatross.madduck.net
+X-Virus-Scanned: by amavisd-new-20030616-p10 (Debian) at uncasino.it
+Content-Length: 2084
+Lines: 64
+
+
+--CE+1k2dSO48ffgeK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Enrico,
+
+I've long been playing with ideas to make something similar to
+buffy, and now you beat me to it. May I suggest the following things
+for a future version?
+
+1. It would be great if buffy could display mailboxes that have
+   changed as bold and allow the user to clear the bold flag (e.g.
+   middle mouse button), similar to what xbuffy does.
+
+2. It would be great to have a mode starting with an empty list and
+   then adding mailbox lines as they come in. So if I get a message
+   to debian, buffy prepends (or appends, should be configurable)
+   a line for the debian mailbox to the end. If I get a mail for the
+   university, the uni mailbox appears above the debian mailbox. if
+   now another debian mail comes in, debian moves to the top again.
+   This should be configurable.
+
+3. Can the GTK window be skinned to have it take up very little
+   space on the desktop, like xbuffy? I think this would combine great
+   with point 2.
+  =20
+4. buffy should honour mutt's mailbox settings, as i reported in the
+   bug.
+
+5. it would be great if maildirs could be scanned recursively for
+   other maildirs, and the results presented in a threaded view if
+   possible.
+
+That's all for now. If I can think of other things, I will let you
+know.
+
+Great to see buffy. Thanks!
+
+--=20
+Please do not CC me when replying to lists; I read them!
+=20
+ .''`.     martin f. krafft <madduck@debian.org>
+: :'  :    proud Debian developer, admin, and user
+`. `'`
+  `-  Debian - when you have better things to do than fixing a system
+=20
+Invalid/expired PGP subkeys? Use subkeys.pgp.net as keyserver!
+
+--CE+1k2dSO48ffgeK
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+
+iD8DBQFBNZKMIgvIgzMMSnURAr9jAJ9Qs6LZO9MYK2KNuH4QAjTrYhFH2QCgyeX7
+1BoNjjttI2Vu3g1cthjnMaM=
+=mQY8
+-----END PGP SIGNATURE-----
+
+--CE+1k2dSO48ffgeK--

@@ -1,0 +1,22 @@
+[mua mutt]
+selected=true
+gui command=/usr/bin/x-terminal-emulator -e /usr/bin/mutt -f %p
+
+[mua Other]
+gui command=/usr/bin/sample-mail-editor --folder %p
+
+[folder /var/mail/enrico]
+
+[folder /home/enrico/Maildir]
+
+[folder /home/enrico/Mail]
+
+[folder /home/enrico/mail]
+
+[view]
+empty=false
+read=false
+important=true
+
+[general]
+interval=600
