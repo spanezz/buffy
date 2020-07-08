@@ -177,12 +177,12 @@ void MailProgram::setCommand(const std::string& type, const std::string& val) { 
 bool MailProgram::selected() const { return getBool("selected"); }
 void MailProgram::setSelected(bool val) { return setBool("selected", val); }
 
-void MailProgram::run(const MailFolder& folder, const std::string& cmdtype)
+void MailProgram::run(std::shared_ptr<MailFolder> folder, const std::string& cmdtype)
 {
     std::string cmd = command(cmdtype);
     std::string::size_type p;
     while ((p = cmd.find("%p")) != std::string::npos)
-        cmd.replace(p, 2, folder.path());
+        cmd.replace(p, 2, folder->path());
 
     // TODO: use '~' as working directory
     std::vector<std::string> argv;
@@ -398,9 +398,9 @@ General Config::general()
     return General(*this, "general");
 }
 
-Folder Config::folder(const buffy::MailFolder& folder)
+Folder Config::folder(std::shared_ptr<buffy::MailFolder> folder)
 {
-    return this->folder(folder.path());
+    return this->folder(folder->path());
 }
 
 Folder Config::folder(const std::string& folder)

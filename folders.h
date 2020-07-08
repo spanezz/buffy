@@ -15,10 +15,10 @@ class Folder : public QObject
 
 public:
     Folders& folders;
-    buffy::MailFolder folder;
+    std::shared_ptr<buffy::MailFolder> folder;
 
     Folder(Folders& folders,
-           buffy::MailFolder folder,
+           std::shared_ptr<buffy::MailFolder> folder,
            QObject* parent=0);
 
     buffy::config::Folder cfg();
@@ -147,8 +147,8 @@ public:
         : FolderAction(folder, parent)
     {
         connect(this, SIGNAL(triggered()), &folder, SLOT(run_email_program()));
-        QString name(QString::fromStdString(folder.folder.name()));
-        name += QString(" (%1 new)").arg(folder.folder.getMsgNew());
+        QString name(QString::fromStdString(folder.folder->name()));
+        name += QString(" (%1 new)").arg(folder.folder->getMsgNew());
         setText(name);
     }
 };

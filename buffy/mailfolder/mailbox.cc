@@ -248,15 +248,15 @@ static bool isMailbox(const std::string& pathname)
     return is_from(buf);
 }
 
-MailFolder Mailbox::accessFolder(const std::string& path)
+std::shared_ptr<MailFolder> Mailbox::accessFolder(const std::string& path)
 {
     try {
         if (isMailbox(path))
-            return MailFolder(new Mailbox(path));
+            return std::make_shared<Mailbox>(path);
     } catch (std::exception& e) {
         // FIXME cerr << e.type() << ": " << e.fullInfo() << endl;
     }
-    return MailFolder();
+    return std::shared_ptr<Mailbox>();
 }
 
 
@@ -269,10 +269,7 @@ void Mailbox::enumerateFolders(const std::string& parent, MailFolderConsumer& co
 //      throw SystemException(errno, "getting informations on " + parent);
 
     if (isMailbox(parent))
-    {
-        MailFolder f(new Mailbox(parent));
-        cons.consume(f);
-    }
+        cons.consume(std::make_shared<Mailbox>(parent));
 
     if (S_ISDIR(st.st_mode) == 0)
         return;
@@ -292,7 +289,7 @@ void Mailbox::enumerateFolders(const std::string& parent, MailFolderConsumer& co
         std::string candidate = parent + sep + name;
         if (!sys::access(candidate, R_OK))
             continue;
-        MailFolder f(accessFolder(candidate));
+        std::shared_ptr<MailFolder> f(accessFolder(candidate));
         if (f)
             cons.consume(f);
     }

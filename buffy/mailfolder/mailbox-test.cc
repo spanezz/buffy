@@ -17,7 +17,7 @@ class MailFolderCounter : public buffy::MailFolderConsumer
     size_t m_count;
 public:
     MailFolderCounter() : m_count(0) {}
-    void consume(buffy::MailFolder& f) { ++m_count; }
+    void consume(std::shared_ptr<buffy::MailFolder> f) override { ++m_count; }
     size_t count() const { return m_count; }
 };
 
@@ -34,24 +34,24 @@ Tests test("mailfolder_mailbox");
 void Tests::register_tests() {
 
 add_method("empty", []() {
-    buffy::MailFolder test(buffy::mailfolder::Mailbox::accessFolder(TEST_DATA_DIR "/mbox/empty.mbox"));
+    auto test = buffy::mailfolder::Mailbox::accessFolder(TEST_DATA_DIR "/mbox/empty.mbox");
     wassert(actual((bool)test) == true);
-    wassert(actual(test.name()) == "empty.mbox");
-    wassert(actual(test.path()) == TEST_DATA_DIR "/mbox/empty.mbox");
-    wassert(actual(test.type()) == "Mailbox");
+    wassert(actual(test->name()) == "empty.mbox");
+    wassert(actual(test->path()) == TEST_DATA_DIR "/mbox/empty.mbox");
+    wassert(actual(test->type()) == "Mailbox");
 
-    wassert(actual(test.getMsgTotal()) == -1);
-    wassert(actual(test.getMsgUnread()) == -1);
-    wassert(actual(test.getMsgNew()) == -1);
-    wassert(actual(test.getMsgFlagged()) == -1);
-    wassert(actual(test.changed()) == true);
+    wassert(actual(test->getMsgTotal()) == -1);
+    wassert(actual(test->getMsgUnread()) == -1);
+    wassert(actual(test->getMsgNew()) == -1);
+    wassert(actual(test->getMsgFlagged()) == -1);
+    wassert(actual(test->changed()) == true);
 
-    test.updateStatistics();
-    wassert(actual(test.getMsgTotal()) == 0);
-    wassert(actual(test.getMsgUnread()) == 0);
-    wassert(actual(test.getMsgNew()) == 0);
-    wassert(actual(test.getMsgFlagged()) == 0);
-    wassert(actual(test.changed()) == false);
+    test->updateStatistics();
+    wassert(actual(test->getMsgTotal()) == 0);
+    wassert(actual(test->getMsgUnread()) == 0);
+    wassert(actual(test->getMsgNew()) == 0);
+    wassert(actual(test->getMsgFlagged()) == 0);
+    wassert(actual(test->changed()) == false);
 
     MailFolderCounter counter;
     buffy::mailfolder::Mailbox::enumerateFolders(TEST_DATA_DIR "/mbox/empty.mbox", counter);
@@ -59,24 +59,24 @@ add_method("empty", []() {
 });
 
 add_method("non_empty", []() {
-    buffy::MailFolder test(buffy::mailfolder::Mailbox::accessFolder(TEST_DATA_DIR "/mbox/test.mbox"));
+    auto test = buffy::mailfolder::Mailbox::accessFolder(TEST_DATA_DIR "/mbox/test.mbox");
     wassert(actual((bool)test) == true);
-    wassert(actual(test.name()) == "test.mbox");
-    wassert(actual(test.path()) == TEST_DATA_DIR "/mbox/test.mbox");
-    wassert(actual(test.type()) == "Mailbox");
+    wassert(actual(test->name()) == "test.mbox");
+    wassert(actual(test->path()) == TEST_DATA_DIR "/mbox/test.mbox");
+    wassert(actual(test->type()) == "Mailbox");
 
-    wassert(actual(test.getMsgTotal()) == -1);
-    wassert(actual(test.getMsgUnread()) == -1);
-    wassert(actual(test.getMsgNew()) == -1);
-    wassert(actual(test.getMsgFlagged()) == -1);
-    wassert(actual(test.changed()) == true);
+    wassert(actual(test->getMsgTotal()) == -1);
+    wassert(actual(test->getMsgUnread()) == -1);
+    wassert(actual(test->getMsgNew()) == -1);
+    wassert(actual(test->getMsgFlagged()) == -1);
+    wassert(actual(test->changed()) == true);
 
-    test.updateStatistics();
-    wassert(actual(test.getMsgTotal()) == 3);
-    wassert(actual(test.getMsgUnread()) == 0);
-    wassert(actual(test.getMsgNew()) == 0);
-    wassert(actual(test.getMsgFlagged()) == 1);
-    wassert(actual(test.changed()) == false);
+    test->updateStatistics();
+    wassert(actual(test->getMsgTotal()) == 3);
+    wassert(actual(test->getMsgUnread()) == 0);
+    wassert(actual(test->getMsgNew()) == 0);
+    wassert(actual(test->getMsgFlagged()) == 1);
+    wassert(actual(test->changed()) == false);
 
     MailFolderCounter counter;
     buffy::mailfolder::Mailbox::enumerateFolders(TEST_DATA_DIR "/mbox/test.mbox", counter);
@@ -89,8 +89,8 @@ add_method("broken_symlink", []() {
     workdir.symlinkat("does-not-exist", "broken.mbox");
     std::string testfile = str::joinpath(workdir.name(), "broken.mbox");
 
-    buffy::MailFolder test(buffy::mailfolder::Mailbox::accessFolder(testfile));
-    wassert(actual((bool)test) == false);
+    auto test = buffy::mailfolder::Mailbox::accessFolder(testfile);
+    wassert_false((bool)test);
 
     MailFolderCounter counter;
     buffy::mailfolder::Mailbox::enumerateFolders(testfile, counter);

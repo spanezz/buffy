@@ -221,15 +221,15 @@ static bool isMaildir(const std::string& pathname)
     }
 }
 
-MailFolder Maildir::accessFolder(const std::string& path)
+std::shared_ptr<MailFolder> Maildir::accessFolder(const std::string& path)
 {
     try {
         if (isMaildir(path))
-            return MailFolder(new Maildir(path));
+            return std::make_shared<Maildir>(path);
     } catch (std::system_error& e) {
         // FIXME: cerr << e.type() << ": " << e.fullInfo() << endl;
     }
-    return MailFolder();
+    return std::shared_ptr<Maildir>();
 }
 
 static void enumerateSubfolders(
@@ -258,10 +258,7 @@ static void enumerateSubfolders(
             return;
 
         if (isMaildir(parent))
-        {
-            MailFolder f(new Maildir(name, parent));
-            cons.consume(f);
-        }
+            cons.consume(std::make_shared<Maildir>(name, parent));
 
         // Recursively enumerate the Maildirs in the directory
         sys::Path dir(parent);

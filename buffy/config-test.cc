@@ -96,7 +96,7 @@ add_method("persist", []() {
 
     buffy::config::Config conf0;
     std::string testString(std::to_string(getpid()));
-    buffy::MailFolder testFolder(new buffy::mailfolder::Mailbox("mbox/empty.mbox"));
+    auto testFolder = std::make_shared<buffy::mailfolder::Mailbox>("mbox/empty.mbox");
 
     // Set a few nonstandard values, then save them
     std::vector<std::string> locations;

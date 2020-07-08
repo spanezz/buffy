@@ -39,31 +39,31 @@ add_method("mbox", []() {
 
         wassert(actual(folders.size()) == 2u);
 
-        buffy::MailFolder empty = folders[0].name() == "empty.mbox" ? folders[0] : folders[1];
-        buffy::MailFolder test = folders[0].name() == "empty.mbox" ? folders[1] : folders[0];
+        std::shared_ptr<buffy::MailFolder> empty = folders[0]->name() == "empty.mbox" ? folders[0] : folders[1];
+        std::shared_ptr<buffy::MailFolder> test = folders[0]->name() == "empty.mbox" ? folders[1] : folders[0];
 
-        wassert(actual(empty.path()) == TEST_DATA_DIR "/mbox/empty.mbox");
-        wassert(actual(empty.name()) == "empty.mbox");
-        wassert(actual(empty.type()) == "Mailbox");
-        wassert(actual(test.path()) == TEST_DATA_DIR "/mbox/test.mbox");
-        wassert(actual(test.name()) == "test.mbox");
-        wassert(actual(test.type()) == "Mailbox");
+        wassert(actual(empty->path()) == TEST_DATA_DIR "/mbox/empty.mbox");
+        wassert(actual(empty->name()) == "empty.mbox");
+        wassert(actual(empty->type()) == "Mailbox");
+        wassert(actual(test->path()) == TEST_DATA_DIR "/mbox/test.mbox");
+        wassert(actual(test->name()) == "test.mbox");
+        wassert(actual(test->type()) == "Mailbox");
 
-        empty.updateStatistics();
+        empty->updateStatistics();
 
-        wassert(actual(empty.getMsgTotal()) == 0);
-        wassert(actual(empty.getMsgUnread()) == 0);
-        wassert(actual(empty.getMsgNew()) == 0);
-        wassert(actual(empty.getMsgFlagged()) == 0);
-        wassert(actual(empty.changed()) == false);
+        wassert(actual(empty->getMsgTotal()) == 0);
+        wassert(actual(empty->getMsgUnread()) == 0);
+        wassert(actual(empty->getMsgNew()) == 0);
+        wassert(actual(empty->getMsgFlagged()) == 0);
+        wassert(actual(empty->changed()) == false);
 
-        test.updateStatistics();
+        test->updateStatistics();
 
-        wassert(actual(test.getMsgTotal()) == 3);
-        wassert(actual(test.getMsgUnread()) == 0);
-        wassert(actual(test.getMsgNew()) == 0);
-        wassert(actual(test.getMsgFlagged()) == 1);
-        wassert(actual(test.changed()) == false);
+        wassert(actual(test->getMsgTotal()) == 3);
+        wassert(actual(test->getMsgUnread()) == 0);
+        wassert(actual(test->getMsgNew()) == 0);
+        wassert(actual(test->getMsgFlagged()) == 1);
+        wassert(actual(test->changed()) == false);
     }
 });
 
@@ -78,31 +78,31 @@ add_method("mboxgz", [] {
 
         wassert(actual(folders.size()) == 2u);
 
-        buffy::MailFolder empty = folders[0].name() == "empty.mbox.gz" ? folders[0] : folders[1];
-        buffy::MailFolder test = folders[0].name() == "empty.mbox.gz" ? folders[1] : folders[0];
+        std::shared_ptr<buffy::MailFolder> empty = folders[0]->name() == "empty.mbox.gz" ? folders[0] : folders[1];
+        std::shared_ptr<buffy::MailFolder> test = folders[0]->name() == "empty.mbox.gz" ? folders[1] : folders[0];
 
-        wassert(actual(empty.path()) == TEST_DATA_DIR "/mboxgz/empty.mbox.gz");
-        wassert(actual(empty.name()) == "empty.mbox.gz");
-        wassert(actual(empty.type()) == "Mailbox");
-        wassert(actual(test.path()) == TEST_DATA_DIR "/mboxgz/test.mbox.gz");
-        wassert(actual(test.name()) == "test.mbox.gz");
-        wassert(actual(test.type()) == "Mailbox");
+        wassert(actual(empty->path()) == TEST_DATA_DIR "/mboxgz/empty.mbox.gz");
+        wassert(actual(empty->name()) == "empty.mbox.gz");
+        wassert(actual(empty->type()) == "Mailbox");
+        wassert(actual(test->path()) == TEST_DATA_DIR "/mboxgz/test.mbox.gz");
+        wassert(actual(test->name()) == "test.mbox.gz");
+        wassert(actual(test->type()) == "Mailbox");
 
-        empty.updateStatistics();
+        empty->updateStatistics();
 
-        wassert(actual(empty.getMsgTotal()) == 0);
-        wassert(actual(empty.getMsgUnread()) == 0);
-        wassert(actual(empty.getMsgNew()) == 0);
-        wassert(actual(empty.getMsgFlagged()) == 0);
-        wassert(actual(empty.changed()) == false);
+        wassert(actual(empty->getMsgTotal()) == 0);
+        wassert(actual(empty->getMsgUnread()) == 0);
+        wassert(actual(empty->getMsgNew()) == 0);
+        wassert(actual(empty->getMsgFlagged()) == 0);
+        wassert(actual(empty->changed()) == false);
 
-        test.updateStatistics();
+        test->updateStatistics();
 
-        wassert(actual(test.getMsgTotal()) == 3);
-        wassert(actual(test.getMsgUnread()) == 0);
-        wassert(actual(test.getMsgNew()) == 0);
-        wassert(actual(test.getMsgFlagged()) == 1);
-        wassert(actual(test.changed()) == false);
+        wassert(actual(test->getMsgTotal()) == 3);
+        wassert(actual(test->getMsgUnread()) == 0);
+        wassert(actual(test->getMsgNew()) == 0);
+        wassert(actual(test->getMsgFlagged()) == 1);
+        wassert(actual(test->changed()) == false);
     }
 });
 
@@ -117,75 +117,75 @@ add_method("maildir", []() {
 
         wassert(actual(folders.size()) == 4u);
 
-        buffy::MailFolder root;
-        buffy::MailFolder empty;
-        buffy::MailFolder test;
-        buffy::MailFolder loop1;
+        std::shared_ptr<buffy::MailFolder> root;
+        std::shared_ptr<buffy::MailFolder> empty;
+        std::shared_ptr<buffy::MailFolder> test;
+        std::shared_ptr<buffy::MailFolder> loop1;
         int missed = 0;
         for (int j = 0; j < 4; ++j)
         {
             //cerr << *i << " NAME: " << folders[j].name() << endl;
-            if (folders[j].name() == "maildir")
+            if (folders[j]->name() == "maildir")
                 root = folders[j];
-            else if (folders[j].name() == "maildir.empty")
+            else if (folders[j]->name() == "maildir.empty")
                 empty = folders[j];
-            else if (folders[j].name() == "maildir.test")
+            else if (folders[j]->name() == "maildir.test")
                 test = folders[j];
-            else if (folders[j].name() == "maildir.loop1")
+            else if (folders[j]->name() == "maildir.loop1")
                 loop1 = folders[j];
             else
                 ++missed;
         }
         wassert(actual(missed) == 0);
-        wassert_true(root.valid());
-        wassert_true(empty.valid());
-        wassert_true(test.valid());
-        wassert_true(loop1.valid());
+        wassert_true(root);
+        wassert_true(empty);
+        wassert_true(test);
+        wassert_true(loop1);
 
-        wassert(actual(root.path()) == TEST_DATA_DIR "/maildir");
-        wassert(actual(root.name()) == "maildir");
-        wassert(actual(root.type()) == "Maildir");
-        wassert(actual(empty.path()) == TEST_DATA_DIR "/maildir/empty");
-        wassert(actual(empty.name()) == "maildir.empty");
-        wassert(actual(empty.type()) == "Maildir");
-        wassert(actual(test.path()) == TEST_DATA_DIR "/maildir/test");
-        wassert(actual(test.name()) == "maildir.test");
-        wassert(actual(test.type()) == "Maildir");
-        wassert(actual(loop1.path()) == TEST_DATA_DIR "/maildir/loop1");
-        wassert(actual(loop1.name()) == "maildir.loop1");
-        wassert(actual(loop1.type()) == "Maildir");
+        wassert(actual(root->path()) == TEST_DATA_DIR "/maildir");
+        wassert(actual(root->name()) == "maildir");
+        wassert(actual(root->type()) == "Maildir");
+        wassert(actual(empty->path()) == TEST_DATA_DIR "/maildir/empty");
+        wassert(actual(empty->name()) == "maildir.empty");
+        wassert(actual(empty->type()) == "Maildir");
+        wassert(actual(test->path()) == TEST_DATA_DIR "/maildir/test");
+        wassert(actual(test->name()) == "maildir.test");
+        wassert(actual(test->type()) == "Maildir");
+        wassert(actual(loop1->path()) == TEST_DATA_DIR "/maildir/loop1");
+        wassert(actual(loop1->name()) == "maildir.loop1");
+        wassert(actual(loop1->type()) == "Maildir");
 
-        root.updateStatistics();
+        root->updateStatistics();
 
-        wassert(actual(root.getMsgTotal()) == 0);
-        wassert(actual(root.getMsgUnread()) == 0);
-        wassert(actual(root.getMsgNew()) == 0);
-        wassert(actual(root.getMsgFlagged()) == 0);
-        wassert(actual(root.changed()) == false);
+        wassert(actual(root->getMsgTotal()) == 0);
+        wassert(actual(root->getMsgUnread()) == 0);
+        wassert(actual(root->getMsgNew()) == 0);
+        wassert(actual(root->getMsgFlagged()) == 0);
+        wassert(actual(root->changed()) == false);
 
-        empty.updateStatistics();
+        empty->updateStatistics();
 
-        wassert(actual(empty.getMsgTotal()) == 0);
-        wassert(actual(empty.getMsgUnread()) == 0);
-        wassert(actual(empty.getMsgNew()) == 0);
-        wassert(actual(empty.getMsgFlagged()) == 0);
-        wassert(actual(empty.changed()) == false);
+        wassert(actual(empty->getMsgTotal()) == 0);
+        wassert(actual(empty->getMsgUnread()) == 0);
+        wassert(actual(empty->getMsgNew()) == 0);
+        wassert(actual(empty->getMsgFlagged()) == 0);
+        wassert(actual(empty->changed()) == false);
 
-        test.updateStatistics();
+        test->updateStatistics();
 
-        wassert(actual(test.getMsgTotal()) == 3);
-        wassert(actual(test.getMsgUnread()) == 0);
-        wassert(actual(test.getMsgNew()) == 0);
-        wassert(actual(test.getMsgFlagged()) == 1);
-        wassert(actual(test.changed()) == false);
+        wassert(actual(test->getMsgTotal()) == 3);
+        wassert(actual(test->getMsgUnread()) == 0);
+        wassert(actual(test->getMsgNew()) == 0);
+        wassert(actual(test->getMsgFlagged()) == 1);
+        wassert(actual(test->changed()) == false);
 
-        loop1.updateStatistics();
+        loop1->updateStatistics();
 
-        wassert(actual(loop1.getMsgTotal()) == 0);
-        wassert(actual(loop1.getMsgUnread()) == 0);
-        wassert(actual(loop1.getMsgNew()) == 0);
-        wassert(actual(loop1.getMsgFlagged()) == 0);
-        wassert(actual(loop1.changed()) == false);
+        wassert(actual(loop1->getMsgTotal()) == 0);
+        wassert(actual(loop1->getMsgUnread()) == 0);
+        wassert(actual(loop1->getMsgNew()) == 0);
+        wassert(actual(loop1->getMsgFlagged()) == 0);
+        wassert(actual(loop1->changed()) == false);
     }
 });
 
@@ -199,25 +199,25 @@ add_method("remove_mbox", []() {
     // Create an empty mailbox
     sys::write_file(testfile, std::string());
 
-    buffy::MailFolder mf(new buffy::mailfolder::Mailbox(testfile));
+    auto mf = std::make_shared<buffy::mailfolder::Mailbox>(testfile);
 
-    mf.updateStatistics();
+    mf->updateStatistics();
 
-    wassert(actual(mf.getMsgTotal()) == 0);
-    wassert(actual(mf.getMsgUnread()) == 0);
-    wassert(actual(mf.getMsgNew()) == 0);
-    wassert(actual(mf.getMsgFlagged()) == 0);
+    wassert(actual(mf->getMsgTotal()) == 0);
+    wassert(actual(mf->getMsgUnread()) == 0);
+    wassert(actual(mf->getMsgNew()) == 0);
+    wassert(actual(mf->getMsgFlagged()) == 0);
 
     sys::unlink(testfile);
 
-    wassert_true(mf.changed());
+    wassert_true(mf->changed());
 
-    mf.updateStatistics();
+    mf->updateStatistics();
 
-    wassert(actual(mf.getMsgTotal()) == 0);
-    wassert(actual(mf.getMsgUnread()) == 0);
-    wassert(actual(mf.getMsgNew()) == 0);
-    wassert(actual(mf.getMsgFlagged()) == 0);
+    wassert(actual(mf->getMsgTotal()) == 0);
+    wassert(actual(mf->getMsgUnread()) == 0);
+    wassert(actual(mf->getMsgNew()) == 0);
+    wassert(actual(mf->getMsgFlagged()) == 0);
 });
 
 add_method("remove_maildir", []() {
@@ -232,27 +232,27 @@ add_method("remove_maildir", []() {
     empty.mkdirat("cur");
     empty.mkdirat("new");
 
-    buffy::MailFolder mf(new buffy::mailfolder::Maildir(empty.name()));
+    auto mf = std::make_shared<buffy::mailfolder::Maildir>(empty.name());
 
-    mf.updateStatistics();
+    mf->updateStatistics();
 
-    wassert(actual(mf.getMsgTotal()) == 0);
-    wassert(actual(mf.getMsgUnread()) == 0);
-    wassert(actual(mf.getMsgNew()) == 0);
-    wassert(actual(mf.getMsgFlagged()) == 0);
+    wassert(actual(mf->getMsgTotal()) == 0);
+    wassert(actual(mf->getMsgUnread()) == 0);
+    wassert(actual(mf->getMsgNew()) == 0);
+    wassert(actual(mf->getMsgFlagged()) == 0);
 
     empty.rmdirat("cur");
     empty.rmdirat("new");
     workdir.rmdirat("empty");
 
-    wassert_true(mf.changed());
+    wassert_true(mf->changed());
 
-    mf.updateStatistics();
+    mf->updateStatistics();
 
-    wassert(actual(mf.getMsgTotal()) == 0);
-    wassert(actual(mf.getMsgUnread()) == 0);
-    wassert(actual(mf.getMsgNew()) == 0);
-    wassert(actual(mf.getMsgFlagged()) == 0);
+    wassert(actual(mf->getMsgTotal()) == 0);
+    wassert(actual(mf->getMsgUnread()) == 0);
+    wassert(actual(mf->getMsgNew()) == 0);
+    wassert(actual(mf->getMsgFlagged()) == 0);
 });
 
 }

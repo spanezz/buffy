@@ -28,7 +28,7 @@ class Consumer
 {
 public:
     virtual ~Consumer() {}
-    virtual void consume(ITEM&) = 0;
+    virtual void consume(ITEM) = 0;
 };
 
 template<class ITEM>
@@ -50,7 +50,7 @@ protected:
 public:
     Filter<ITEM>(Consumer<ITEM>& next) : next(next) {}
 
-    virtual void consume(ITEM& item)
+    void consume(ITEM item) override
     {
         next.consume(item);
     }
@@ -66,7 +66,7 @@ public:
     MatcherFilter<ITEM>(Matcher<ITEM>& matcher, Consumer<ITEM>& next) throw ()
         : Filter<ITEM>(next), matcher(matcher) {}
 
-    virtual void consume(ITEM& item)
+    void consume(ITEM item) override
     {
         if (matcher.match(item))
             this->next.consume(item);

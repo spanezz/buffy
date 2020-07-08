@@ -1,33 +1,13 @@
 #ifndef BUFFY_MAILDIRMAILFOLDER_H
 #define BUFFY_MAILDIRMAILFOLDER_H
 
-/*
- * Maildir mail folder access
- *
- * Copyright (C) 2004--2008  Enrico Zini <enrico@debian.org>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
- */
-
 #include <buffy/mailfolder.h>
 #include <string>
 
 namespace buffy {
 namespace mailfolder {
 
-class Maildir : public MailFolderImpl
+class Maildir : public MailFolder
 {
 protected:
     std::string _name;
@@ -57,12 +37,11 @@ public:
     virtual bool changed();
     virtual void updateStatistics();
 
-    static MailFolder accessFolder(const std::string& path);
+    static std::shared_ptr<MailFolder> accessFolder(const std::string& path);
     static void enumerateFolders(const std::string& dir, MailFolderConsumer& cons);
 };
 
 }
 }
 
-// vim:set ts=4 sw=4:
 #endif

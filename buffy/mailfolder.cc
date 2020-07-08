@@ -25,32 +25,32 @@
 using namespace std;
 using namespace buffy;
 
-MailFolder MailFolder::accessFolder(const std::string& path)
+std::shared_ptr<MailFolder> MailFolder::accessFolder(const std::string& path)
 {
-    MailFolder res = mailfolder::Mailbox::accessFolder(path);
+    std::shared_ptr<MailFolder> res = mailfolder::Mailbox::accessFolder(path);
     if (!res)
         res = mailfolder::Maildir::accessFolder(path);
     return res;
 }
 
 
-void MailFolder::enumerateFolders(const std::string& path, Consumer<MailFolder>& cons)
+void MailFolder::enumerateFolders(const std::string& path, Consumer<std::shared_ptr<MailFolder>>& cons)
 {
     mailfolder::Mailbox::enumerateFolders(path, cons);
     mailfolder::Maildir::enumerateFolders(path, cons);
 }
 
-class MailFolderCollector : public MailFolderConsumer, public vector<MailFolder>
+class MailFolderCollector : public MailFolderConsumer, public std::vector<std::shared_ptr<MailFolder>>
 {
 public:
     virtual ~MailFolderCollector() throw () {}
-    virtual void consume(MailFolder& mf)
+    virtual void consume(std::shared_ptr<MailFolder> mf)
     {
-        push_back(mf);
+        emplace_back(mf);
     }
 };
 
-vector<MailFolder> MailFolder::enumerateFolders(const std::string& path)
+std::vector<std::shared_ptr<MailFolder>> MailFolder::enumerateFolders(const std::string& path)
 {
     MailFolderCollector res;
     enumerateFolders(path, res);

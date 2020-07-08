@@ -1,26 +1,9 @@
 #ifndef BUFFY_CONFIG_CONFIG_H
 #define BUFFY_CONFIG_CONFIG_H
 
-/*
- * Copyright (C) 2004--2008  Enrico Zini <enrico@enricozini.org>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
- */
-
 #include <string>
 #include <vector>
+#include <memory>
 
 struct _GKeyFile;
 typedef struct _GKeyFile GKeyFile;
@@ -134,7 +117,7 @@ public:
 
     bool selected() const;
 
-    void run(const buffy::MailFolder& folder, const std::string& cmdtype = "term");
+    void run(std::shared_ptr<buffy::MailFolder> folder, const std::string& cmdtype = "term");
 
     friend class Config;
 };
@@ -184,7 +167,7 @@ public:
     MailProgram selectedMailProgram();
     void selectMailProgram(const std::string& name);
 
-    Folder folder(const buffy::MailFolder& folder);
+    Folder folder(std::shared_ptr<buffy::MailFolder> folder);
     Folder folder(const std::string& folder);
 
     std::vector<std::string> locations();

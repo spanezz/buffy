@@ -30,7 +30,7 @@ static ColumnType resolveColumnType(int column)
 }
 
 
-Folder::Folder(Folders &folders, MailFolder folder, QObject *parent)
+Folder::Folder(Folders &folders, std::shared_ptr<MailFolder> folder, QObject *parent)
     : QObject(parent), folders(folders), folder(folder)
 {
     cfg().addDefault("activeinbox", "false");
@@ -56,13 +56,13 @@ bool Folder::is_visible() const
     if (cfg.forceview()) return true;
     if (cfg.forcehide()) return false;
     if (folders.config.view().getBool("only_active_inboxes")) return false;
-    if (folder.getMsgUnread()) return true;
+    if (folder->getMsgUnread()) return true;
     // View any folder as long as it has flagged messages
     bool view_all_flagged = folders.config.view().important();
-    if (view_all_flagged && folder.getMsgFlagged()) return true;
+    if (view_all_flagged && folder->getMsgFlagged()) return true;
     // View any folder as long as it is nonempty
     bool view_all_nonempty = folders.config.view().read();
-    if (view_all_nonempty && folder.getMsgTotal()) return true;
+    if (view_all_nonempty && folder->getMsgTotal()) return true;
     return false;
 }
 
@@ -103,7 +103,7 @@ void Folders::rescan()
         auto folders = MailFolder::enumerateFolders(loc);
         for (auto folder: folders)
         {
-            if (folder.changed()) folder.updateStatistics();
+            if (folder->changed()) folder->updateStatistics();
             all.push_back(new Folder(*this, folder, this));
         }
     }
@@ -115,9 +115,9 @@ void Folders::refresh()
 {
     for (unsigned i = 0; i < all.size(); ++i)
     {
-        if (all[i]->folder.changed())
+        if (all[i]->folder->changed())
         {
-            all[i]->folder.updateStatistics();
+            all[i]->folder->updateStatistics();
             emit dataChanged(createIndex(i, 0), createIndex(i, 5));
         }
     }
@@ -127,7 +127,7 @@ void Folders::refresh()
 bool Folders::has_active_new() const
 {
     for (auto f: all)
-        if (f->cfg().getBool("activeinbox") && f->folder.getMsgNew())
+        if (f->cfg().getBool("activeinbox") && f->folder->getMsgNew())
             return true;
     return false;
 }
@@ -168,11 +168,11 @@ QVariant Folders::data(const QModelIndex &index, int role) const
         const Folder& f = *all[index.row()];
         switch (ctype)
         {
-        case CT_NAME: return QVariant(f.folder.name().c_str());
-        case CT_NEW: return QVariant(f.folder.getMsgNew());
-        case CT_UNREAD: return QVariant(f.folder.getMsgUnread());
-        case CT_TOTAL: return QVariant(f.folder.getMsgTotal());
-        case CT_FLAGGED: return QVariant(f.folder.getMsgFlagged());
+        case CT_NAME: return QVariant(f.folder->name().c_str());
+        case CT_NEW: return QVariant(f.folder->getMsgNew());
+        case CT_UNREAD: return QVariant(f.folder->getMsgUnread());
+        case CT_TOTAL: return QVariant(f.folder->getMsgTotal());
+        case CT_FLAGGED: return QVariant(f.folder->getMsgFlagged());
         default: return QVariant();
         }
         break;
@@ -181,7 +181,7 @@ QVariant Folders::data(const QModelIndex &index, int role) const
     case Qt::StatusTipRole:
     {
         const Folder& f = *all[index.row()];
-        return QVariant(f.folder.path().c_str());
+        return QVariant(f.folder->path().c_str());
         break;
     }
     case Qt::TextAlignmentRole:
@@ -204,7 +204,7 @@ QVariant Folders::data(const QModelIndex &index, int role) const
         break;
     case Qt::FontRole:
         const Folder& f = *all[index.row()];
-        if (f.cfg().getBool("activeinbox") && f.folder.getMsgNew())
+        if (f.cfg().getBool("activeinbox") && f.folder->getMsgNew())
         {
             QFont boldFont;
             boldFont.setBold(true);
@@ -265,7 +265,7 @@ QMimeData* Folders::mimeData(const QModelIndexList &indices) const
         if (row < 0 || row >= all.size())
             data = "";
         else
-            data = QString::fromStdString(all[row]->folder.path());
+            data = QString::fromStdString(all[row]->folder->path());
     }
 
     mimeData->setData("text/plain", data.toUtf8());
@@ -282,7 +282,7 @@ Folder* Folders::valueAt(const QModelIndex &index)
 Folder *Folders::by_name(const std::string &name)
 {
     for (auto f: all)
-        if (f->folder.name() == name)
+        if (f->folder->name() == name)
             return f;
     return 0;
 }
