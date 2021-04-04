@@ -68,6 +68,7 @@ protected:
 public:
     int interval() const;
     void setInterval(int val);
+    std::string mua();
 
     friend class Config;
 };
@@ -100,28 +101,6 @@ public:
     friend class Config;
 };
 
-class MailProgram : public Section
-{
-protected:
-    std::string m_name;
-
-    MailProgram(const std::string& name, Config& cfg, const std::string& section);
-
-    void setSelected(bool val);
-
-public:
-    std::string name() const;
-
-    std::string command(const std::string& type) const;
-    void setCommand(const std::string& type, const std::string& val);
-
-    bool selected() const;
-
-    void run(std::shared_ptr<buffy::MailFolder> folder, const std::string& cmdtype = "term");
-
-    friend class Config;
-};
-
 class Config
 {
 protected:
@@ -146,7 +125,7 @@ public:
     Config();
     Config(const std::string& fname);
     ~Config();
-    
+
     void clear();
     void load(const std::string& file);
     void save();
@@ -161,11 +140,6 @@ public:
     General general();
 
     Section application(const std::string& name);
-
-    std::vector<std::string> mailPrograms();
-    MailProgram mailProgram(const std::string& name);
-    MailProgram selectedMailProgram();
-    void selectMailProgram(const std::string& name);
 
     Folder folder(std::shared_ptr<buffy::MailFolder> folder);
     Folder folder(const std::string& folder);

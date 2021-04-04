@@ -4,6 +4,10 @@
 #include <QFont>
 #include <QMimeData>
 #include <QDebug>
+#include <sys/types.h>  // getpwuid, getuid
+#include <unistd.h>     // getuid
+#include <iostream>
+
 
 using namespace buffy;
 
@@ -72,11 +76,44 @@ void Folder::set_active_inbox(bool value)
     emit folders.visibility_updated();
 }
 
+[[noreturn]] static inline void throw_system_error(const std::string& what)
+{
+    throw std::system_error(errno, std::system_category(), what);
+}
+
 void Folder::run_email_program()
 {
-    config::MailProgram m = folders.config.selectedMailProgram();
-    //qDebug() << "Running " << m.command("gui").c_str();
-    m.run(folder, "gui");
+    auto cmd = folders.config.general().mua();
+    std::string::size_type p;
+    while ((p = cmd.find("%p")) != std::string::npos)
+        cmd.replace(p, 2, folder->path());
+
+    // TODO: use '~' as working directory
+    std::vector<std::string> argv;
+    argv.push_back("/bin/sh");
+    //argv.push_back("/bin/sh");
+    argv.push_back("-c");
+    argv.push_back(cmd);
+
+    // I wonder what this does, as it's undocumented
+    // Glib::spawn_async(".", argv, Glib::SpawnFlags(0), sigc::mem_fun(*this, &MailProgramImpl::on_exit));
+
+    pid_t child = fork();
+    if (child == -1)
+        throw_system_error("cannot fork child process");
+
+    if (child == 0)
+    {
+        // Child code path
+        try {
+            if (execl("/bin/sh", "/bin/sh", "-c", cmd.c_str(), 0) == -1)
+                throw_system_error("cannot exec command in child process");
+            throw_system_error("exec returned instead of replacing child process");
+        } catch (std::exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+        _exit(0);
+    }
 }
 
 
@@ -262,7 +299,7 @@ QMimeData* Folders::mimeData(const QModelIndexList &indices) const
     else
     {
         int row = indices.first().row();
-        if (row < 0 || row >= all.size())
+        if (row < 0 || (unsigned)row >= all.size())
             data = "";
         else
             data = QString::fromStdString(all[row]->folder->path());

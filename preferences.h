@@ -25,7 +25,6 @@ public:
 
 protected slots:
     void folder_list_context_menu(const QPoint&);
-    void email_programs_context_menu(const QPoint&);
 
 private:
     Ui::Preferences *ui;

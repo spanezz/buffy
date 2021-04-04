@@ -18,11 +18,6 @@
 
 //#define TRACE
 
-[[noreturn]] static inline void throw_system_error(const std::string& what)
-{
-    throw std::system_error(errno, std::system_category(), what);
-}
-
 namespace buffy {
 namespace config {
 
@@ -130,6 +125,7 @@ General::General(Config& cfg, const std::string& section)
 
 int General::interval() const { return getInt("interval"); }
 void General::setInterval(int val) { setInt("interval", val); }
+std::string General::mua() { return get("mua"); }
 
 
 Folder::Folder(Config& cfg, const std::string& section)
@@ -166,62 +162,6 @@ Location::Location(Config& cfg, const std::string& section)
 bool Location::skip() const { return getBool("skip"); }
 void Location::setSkip(bool val) { return setBool("skip", val); }
 
-MailProgram::MailProgram(const std::string& name, Config& cfg, const std::string& section)
-    : Section(cfg, section), m_name(name)
-{
-}
-
-std::string MailProgram::name() const { return m_name; }
-std::string MailProgram::command(const std::string& type) const { return get(type + " command"); }
-void MailProgram::setCommand(const std::string& type, const std::string& val) { set(type + " command", val); }
-bool MailProgram::selected() const { return getBool("selected"); }
-void MailProgram::setSelected(bool val) { return setBool("selected", val); }
-
-void MailProgram::run(std::shared_ptr<MailFolder> folder, const std::string& cmdtype)
-{
-    std::string cmd = command(cmdtype);
-    std::string::size_type p;
-    while ((p = cmd.find("%p")) != std::string::npos)
-        cmd.replace(p, 2, folder->path());
-
-    // TODO: use '~' as working directory
-    std::vector<std::string> argv;
-    argv.push_back("/bin/sh");
-    //argv.push_back("/bin/sh");
-    argv.push_back("-c");
-    argv.push_back(cmd);
-
-    // I wonder what this does, as it's undocumented
-//  Glib::spawn_async(".", argv, Glib::SpawnFlags(0), sigc::mem_fun(*this, &MailProgramImpl::on_exit));
-
-    pid_t child = fork();
-    if (child == -1)
-        throw_system_error("cannot fork child process");
-
-    if (child == 0)
-    {
-        // Child code path
-        try {
-            if (execl("/bin/sh", "/bin/sh", "-c", cmd.c_str(), 0) == -1)
-                throw_system_error("cannot exec command in child process");
-            throw_system_error("exec returned instead of replacing child process");
-        } catch (std::exception& e) {
-            std::cerr << e.what() << std::endl;
-        }
-        _exit(0);
-    }
-}
-
-#if 0
-void MailProgramsNode::select(const std::string& name)
-{
-    string sel(selected());
-    if (!sel.empty())
-        Node(*this->m_config, this->m_path + "/mail[" + sel + "]").unset("selected");
-
-    Node(*this->m_config, this->m_path + "/mail[" + name + "]").setBool("selected", true);
-}
-#endif
 
 Config::Config()
     : cfg(0), defaults(0)
@@ -256,6 +196,7 @@ void Config::init()
 
     // Fill in defaults
     g_key_file_set_value(defaults, "general", "interval", "300");
+    g_key_file_set_value(defaults, "general", "mua", "/usr/bin/x-terminal-emulator -e \"/usr/bin/neomutt -f '%p'\"");
     g_key_file_set_value(defaults, "view", "important", "true");
     g_key_file_set_value(defaults, "view", "empty", "false");
     g_key_file_set_value(defaults, "view", "read", "false");
@@ -268,13 +209,6 @@ void Config::init()
     g_key_file_set_value(defaults, loc.c_str(), "skip", "false");
     loc = std::string("location ") + udata->pw_dir + "/mail";
     g_key_file_set_value(defaults, loc.c_str(), "skip", "false");
-
-    g_key_file_set_value(defaults, "mua mutt", "term command", "/usr/bin/mutt -f '%p'");
-    g_key_file_set_value(defaults, "mua mutt", "gui command", "/usr/bin/x-terminal-emulator -e \"/usr/bin/mutt -f '%p'\"");
-    g_key_file_set_value(defaults, "mua mutt", "selected", "true");
-
-    g_key_file_set_value(defaults, "mua Other", "term command", "/usr/bin/sample-mail-editor --folder %p");
-    g_key_file_set_value(defaults, "mua Other", "gui command", "/usr/bin/sample-mail-editor --folder %p");
 
 #ifdef TRACE
     cerr << "Initial defaults: ";
@@ -426,37 +360,6 @@ Location Config::location(const std::string& location)
     // if (!g_key_file_has_group(cfg, secname.c_str()))
         // g_key_file_set_value(defaults, secname.c_str(), "skip", "false");
     return Location(*this, secname);
-}
-
-std::vector<std::string> Config::mailPrograms()
-{
-    return secnames("mua ");
-}
-
-MailProgram Config::mailProgram(const std::string& name)
-{
-    std::string secname = "mua " + name;
-    return MailProgram(name, *this, secname);
-}
-
-MailProgram Config::selectedMailProgram()
-{
-    std::vector<std::string> mps = mailPrograms();
-    for (const auto& i: mps)
-    {
-        MailProgram m = mailProgram(i);
-        if (m.selected())
-            return m;
-    }
-    return mailProgram(mps.front());
-}
-
-void Config::selectMailProgram(const std::string& name)
-{
-    MailProgram oldsel = selectedMailProgram();
-    oldsel.setSelected(false);
-    MailProgram newsel = mailProgram(name);
-    newsel.setSelected(true);
 }
 
 }

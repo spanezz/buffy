@@ -44,18 +44,6 @@ add_method("application_value_with_path", []() {
     wassert(actual(conf.application("foo").get("bar/baz")) == "lippo1");
 });
 
-add_method("mail_programs", []() {
-    buffy::config::Config conf;
-    auto programs = conf.mailPrograms();
-    wassert(actual(programs.size()) == 2u);
-
-    wassert(actual(conf.selectedMailProgram().name()) == "mutt");
-
-    conf.selectMailProgram("Other");
-    wassert(actual(conf.selectedMailProgram().name()) == "Other");
-    wassert(actual(conf.mailProgram("mutt").selected()) == false);
-});
-
 add_method("exotic_chars", []() {
     buffy::config::Config conf;
     std::string funky = "fo%%bar.baz >< foo/bar\\baz 2.0";
@@ -83,11 +71,6 @@ add_method("load", []() {
        gen_ensure(locations.find("/home/enrico/mail") != locations.end());
        */
 #endif
-
-    auto programs = conf0.mailPrograms();
-    wassert(actual(programs.size()) == 2u);
-
-    wassert(actual(conf0.selectedMailProgram().name()) == "mutt");
 });
 
 add_method("persist", []() {
