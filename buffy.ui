@@ -201,11 +201,6 @@
     <string>Flagged</string>
    </property>
   </action>
-  <action name="action_preferences">
-   <property name="text">
-    <string>Preferences</string>
-   </property>
-  </action>
   <action name="action_hide">
    <property name="text">
     <string>Hide</string>

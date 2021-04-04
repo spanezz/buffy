@@ -7,7 +7,6 @@
 #include <QAction>
 #include "folders.h"
 #include "sorterfilter.h"
-#include "preferences.h"
 
 namespace Ui {
 class Buffy;
@@ -28,7 +27,6 @@ public:
     QTimer update_timer;
     Folders& folders;
     SorterFilter sorterfilter;
-    Preferences preferences;
 
     explicit Buffy(QApplication& app, Folders& folders, QWidget *parent = 0);
     ~Buffy();
@@ -43,7 +41,6 @@ private slots:
     void do_quit();
     void do_visibility_change();
     void do_column_visibility_change();
-    void do_preferences();
     void save_config();
     void sort_changed(int logicalIndex, Qt::SortOrder order);
     void folder_activated(const QModelIndex&);

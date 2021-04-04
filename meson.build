@@ -17,15 +17,14 @@ buffy_sources = [
 	'folders.cpp',
 	'folderview.cpp',
 	'main.cpp',
-	'preferences.cpp',
 	'sorterfilter.cpp',
 	'tray.cpp',
 ]
 
 buffy_sources += qt5.preprocess(
-	moc_headers: ['folders.h', 'folderview.h', 'sorterfilter.h', 'tray.h', 'preferences.h', 'buffy.h'],
+	moc_headers: ['folders.h', 'folderview.h', 'sorterfilter.h', 'tray.h', 'buffy.h'],
 	qresource: ['resources.qrc'],
-	ui_files: ['preferences.ui', 'buffy.ui'],
+	ui_files: ['buffy.ui'],
 )
 
 toplevel_inc = include_directories('.')
