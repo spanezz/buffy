@@ -40,7 +40,7 @@ testdata_dir = meson.source_root() / 'testdata'
 
 test_buffy = executable('test-buffy', test_buffy_sources,
         include_directories: toplevel_inc,
-    cpp_args: '-DTEST_DATA_DIR="${testdata_dir}"',
+    cpp_args: '-DTEST_DATA_DIR="' + testdata_dir + '"',
         link_with: [
                 libbuffy,
         ],
