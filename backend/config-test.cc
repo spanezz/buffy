@@ -1,8 +1,8 @@
-#include "buffy/utils/tests.h"
-#include "buffy/utils/sys.h"
-#include "buffy/utils/string.h"
-#include "buffy/config.h"
-#include "buffy/mailfolder/mailbox.h"
+#include "utils/tests.h"
+#include "utils/sys.h"
+#include "utils/string.h"
+#include "config.h"
+#include "mailbox.h"
 #include <cstdlib>
 #include <unistd.h>
 

@@ -18,9 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  */
 
-#include <buffy/mailfolder.h>
-#include <buffy/mailfolder/mailbox.h>
-#include <buffy/mailfolder/maildir.h>
+#include "mailfolder.h"
+#include "mailbox.h"
+#include "maildir.h"
 
 using namespace std;
 using namespace buffy;

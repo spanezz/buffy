@@ -1,6 +1,6 @@
-#include "buffy/mailfolder/maildir.h"
-#include "buffy/utils/sys.h"
-#include "buffy/utils/string.h"
+#include "maildir.h"
+#include "utils/sys.h"
+#include "utils/string.h"
 
 #include <sys/types.h>  // stat, opendir, readdir, utimes
 #include <sys/stat.h>   // stat

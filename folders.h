@@ -1,8 +1,8 @@
 #ifndef FOLDERS_H
 #define FOLDERS_H
 
-#include "buffy/config.h"
-#include "buffy/mailfolder.h"
+#include "backend/config.h"
+#include "backend/mailfolder.h"
 #include <functional>
 #include <QAbstractTableModel>
 #include <QAction>

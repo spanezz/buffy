@@ -1,5 +1,5 @@
-#include "buffy/mailfolder/mailbox.h"
-#include "buffy/utils/sys.h"
+#include "mailbox.h"
+#include "utils/sys.h"
 #include "from.h"
 
 #include <sys/types.h>  // stat, opendir, readdir, utimes

@@ -1,5 +1,5 @@
-#include "buffy/utils/tests.h"
-#include "buffy/mailfolder/from.h"
+#include "utils/tests.h"
+#include "from.h"
 
 #ifndef TEST_DATA_DIR
 #define TEST_DATA_DIR "."

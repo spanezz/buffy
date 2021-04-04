@@ -1,7 +1,7 @@
-#include "buffy/utils/tests.h"
-#include "buffy/utils/sys.h"
-#include "buffy/utils/string.h"
-#include "buffy/mailfolder/maildir.h"
+#include "utils/tests.h"
+#include "utils/sys.h"
+#include "utils/string.h"
+#include "maildir.h"
 
 #ifndef TEST_DATA_DIR
 #define TEST_DATA_DIR "."

@@ -2,7 +2,7 @@
 #define FOLDERVIEW_H
 
 #include <QTableView>
-#include "buffy/config.h"
+#include "backend/config.h"
 
 class FolderView : public QTableView
 {

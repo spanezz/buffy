@@ -1,13 +1,13 @@
-#ifndef BUFFY_MAILDIRMAILFOLDER_H
-#define BUFFY_MAILDIRMAILFOLDER_H
+#ifndef BUFFY_MAILBOXMAILFOLDER_H
+#define BUFFY_MAILBOXMAILFOLDER_H
 
-#include <buffy/mailfolder.h>
+#include "mailfolder.h"
 #include <string>
 
 namespace buffy {
 namespace mailfolder {
 
-class Maildir : public MailFolder
+class Mailbox : public MailFolder
 {
 protected:
     std::string _name;
@@ -16,18 +16,18 @@ protected:
     int _stat_unread;
     int _stat_new;
     int _stat_flagged;
-    bool _deleted;
-    time_t _new_mtime;
-    time_t _cur_mtime;
+    int _mbox_mtime;
+    int _mbox_size;
+    int _deleted;
     
 public:
-    Maildir(const std::string& path) throw ();
-    Maildir(const std::string& name, const std::string& path) throw ();
-    virtual ~Maildir() throw () {}
+    Mailbox(const std::string& path) throw ();
+    Mailbox(const std::string& name, const std::string& path) throw ();
+    virtual ~Mailbox() throw () {}
 
     virtual const std::string& name() const throw () { return _name; }
     virtual const std::string& path() const throw () { return _path; }
-    virtual std::string type() const throw () { return "Maildir"; }
+    virtual std::string type() const throw () { return "Mailbox"; }
 
     virtual int getMsgTotal() const throw () { return _stat_total; }
     virtual int getMsgUnread() const throw () { return _stat_unread; }

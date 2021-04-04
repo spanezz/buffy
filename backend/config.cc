@@ -1,6 +1,6 @@
-#include "buffy/config.h"
-#include "buffy/mailfolder.h"
-#include "buffy/utils/string.h"
+#include "config.h"
+#include "mailfolder.h"
+#include "utils/string.h"
 
 #include <glib.h>
 
