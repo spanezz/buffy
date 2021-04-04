@@ -3,29 +3,30 @@ project('buffy', 'cpp', version: '2.0', license : 'GPL-2.0-or-later', default_op
 add_global_arguments('-Wextra', '-Wno-unused-parameter', language : 'cpp')
 
 # Dependencies
-qt5 = import('qt5')
-qt5core_dep = dependency('qt5', modules: 'Core')
-qt5gui_dep = dependency('qt5', modules: 'Gui')
-qt5widgets_dep = dependency('qt5', modules: 'Widgets')
+# qt5 = import('qt5')
+# qt5core_dep = dependency('qt5', modules: 'Core')
+# qt5gui_dep = dependency('qt5', modules: 'Gui')
+# qt5widgets_dep = dependency('qt5', modules: 'Widgets')
 glib_dep = dependency('glib-2.0')
 zlib_dep = dependency('zlib')
+gtkmm_dep = dependency('gtkmm-3.0')
 
 subdir('backend')
 
 buffy_sources = [
-    'buffy.cpp',
-    'folders.cpp',
-    'folderview.cpp',
+#     'buffy.cpp',
+#     'folders.cpp',
+#     'folderview.cpp',
+#     'sorterfilter.cpp',
+#     'tray.cpp',
     'main.cpp',
-    'sorterfilter.cpp',
-    'tray.cpp',
 ]
 
-buffy_sources += qt5.preprocess(
-    moc_headers: ['folders.h', 'folderview.h', 'sorterfilter.h', 'tray.h', 'buffy.h'],
-    qresource: ['resources.qrc'],
-    ui_files: ['buffy.ui'],
-)
+# buffy_sources += qt5.preprocess(
+#     moc_headers: ['folders.h', 'folderview.h', 'sorterfilter.h', 'tray.h', 'buffy.h'],
+#     qresource: ['resources.qrc'],
+#     ui_files: ['buffy.ui'],
+# )
 
 toplevel_inc = include_directories('.')
 
@@ -34,7 +35,8 @@ executable('buffy', buffy_sources,
        include_directories: toplevel_inc,
        install: true,
        dependencies: [
-           qt5core_dep, qt5gui_dep, qt5widgets_dep,
+           # qt5core_dep, qt5gui_dep, qt5widgets_dep,
+           gtkmm_dep,
        ],
 )
 

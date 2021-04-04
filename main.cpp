@@ -1,3 +1,6 @@
+#include <gtkmm.h>
+
+#if 0
 #include "buffy.h"
 #include "tray.h"
 #include <QApplication>
@@ -5,10 +8,9 @@
 #include <QDebug>
 #include "folders.h"
 #include <iostream>
+#endif
 
-using namespace buffy;
-using namespace std;
-
+#if 0
 struct Main
 {
     QApplication app;
@@ -52,9 +54,26 @@ struct Main
         return app.exec();
     }
 };
+#endif
+
+class Buffy : public Gtk::Window
+{
+public:
+    Buffy()
+    {
+        set_title("Buffy");
+        set_default_size(200, 200);
+    }
+};
+
 
 int main(int argc, char *argv[])
 {
-    Main main(argc, argv);
-    return main.run_gui();
+    auto app = Gtk::Application::create(argc, argv, "org.enricozini.buffy");
+
+    Buffy buffy;
+    return app->run(buffy);
+
+    // Main main(argc, argv);
+    // return main.run_gui();
 }
