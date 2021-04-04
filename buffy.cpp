@@ -1,4 +1,5 @@
 #include "buffy.h"
+#include "backend/mailfolder.h"
 #if 0
 #include "ui_buffy.h"
 #include <QDebug>
@@ -35,12 +36,28 @@ void Buffy::on_startup()
 
     add_action("quit", sigc::mem_fun(*this, &Buffy::on_action_quit));
     set_accel_for_action("quit", "<Primary>q");
+    add_action("rescan", sigc::mem_fun(*this, &Buffy::rescan));
+    set_accel_for_action("rescan", "<Primary><Shift>r");
+    add_action("refresh", sigc::mem_fun(*this, &Buffy::refresh));
+    set_accel_for_action("refresh", "<Primary>r");
 
     Glib::ustring ui_info = R"(
 <interface>
   <menu id='menubar'>
     <submenu>
       <attribute name='label' translatable='yes'>_Buffy</attribute>
+      <section>
+        <item>
+          <attribute name='label' translatable='yes'>_Refresh</attribute>
+          <attribute name='action'>app.refresh</attribute>
+          <attribute name='accel'>&lt;Primary&gt;r</attribute>
+        </item>
+        <item>
+          <attribute name='label' translatable='yes'>R_escan</attribute>
+          <attribute name='action'>app.rescan</attribute>
+          <attribute name='accel'>&lt;Primary&gt;&lt;Shift&gt;r</attribute>
+        </item>
+      </section>
       <section>
         <item>
           <attribute name='label' translatable='yes'>_Quit</attribute>
@@ -64,43 +81,6 @@ void Buffy::on_startup()
     </submenu>
   </menu>
 </interface>)";
-//      <section>
-//        <item>
-//          <attribute name='label' translatable='yes'>_New</attribute>
-//          <attribute name='action'>example.new</attribute>
-//          <attribute name='accel'>&lt;Primary&gt;n</attribute>
-//        </item>
-//        <item>
-//          <attribute name='label' translatable='yes'>_Open</attribute>
-//          <attribute name='action'>example.open</attribute>
-//          <attribute name='accel'>&lt;Primary&gt;o</attribute>
-//        </item>
-//      </section>
-//      <section>
-//        <item>
-//          <attribute name='label' translatable='yes'>Rain</attribute>
-//          <attribute name='action'>example.rain</attribute>
-//        </item>
-//      </section>
-
-//    <submenu>
-//      <attribute name='label' translatable='yes'>_Edit</attribute>
-//      <item>
-//        <attribute name='label' translatable='yes'>_Cut</attribute>
-//        <attribute name='action'>example.cut</attribute>
-//        <attribute name='accel'>&lt;Primary&gt;x</attribute>
-//      </item>
-//      <item>
-//        <attribute name='label' translatable='yes'>_Copy</attribute>
-//        <attribute name='action'>example.copy</attribute>
-//        <attribute name='accel'>&lt;Primary&gt;c</attribute>
-//      </item>
-//      <item>
-//        <attribute name='label' translatable='yes'>_Paste</attribute>
-//        <attribute name='action'>example.paste</attribute>
-//        <attribute name='accel'>&lt;Primary&gt;v</attribute>
-//      </item>
-//    </submenu>
 
     m_refbuilder->add_from_string(ui_info);
 
@@ -109,9 +89,9 @@ void Buffy::on_startup()
     if (menubar)
         set_menubar(menubar);
 
-//    auto appmenu = get_ui_component<Gio::Menu>("appmenu");
-//    if (appmenu)
-//        set_app_menu(appmenu);
+    // auto appmenu = get_ui_component<Gio::Menu>("appmenu");
+    // if (appmenu)
+    //     set_app_menu(appmenu);
 }
 
 void Buffy::on_activate()
@@ -153,6 +133,33 @@ void Buffy::on_action_quit()
     std::vector<Gtk::Window*> windows = get_windows();
     if (windows.size() > 0)
         windows[0]->hide(); // In this simple case, we know there is only one window.
+}
+
+void Buffy::rescan()
+{
+    folders.clear();
+
+    for (auto loc: config.locations())
+    {
+        auto folders = buffy::MailFolder::enumerateFolders(loc);
+        for (auto folder: folders)
+        {
+            if (folder->changed()) folder->updateStatistics();
+            folders.emplace_back(folder);
+        }
+    }
+}
+
+void Buffy::refresh()
+{
+    for (auto folder: folders)
+    {
+        if (folder->changed())
+        {
+            folder->updateStatistics();
+            // emit dataChanged(createIndex(i, 0), createIndex(i, 5));
+        }
+    }
 }
 
 

@@ -17,8 +17,12 @@ public:
     buffy::config::Config config;
     buffy::config::Section prefs;
     Glib::RefPtr<Gtk::Builder> m_refbuilder;
+    std::vector<std::shared_ptr<buffy::MailFolder>> folders;
 
     Buffy();
+
+    void rescan();
+    void refresh();
 
 protected:
     void on_startup() override;
