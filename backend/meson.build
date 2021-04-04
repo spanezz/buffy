@@ -16,7 +16,7 @@ libbuffy_sources = [
     'config.cc',
 ]
 
-libbuffy = library('buffy',
+libbuffy = static_library('buffy',
         libbuffy_sources,
         include_directories: toplevel_inc,
         dependencies: [
