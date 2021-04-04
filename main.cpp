@@ -59,10 +59,8 @@ struct Main
 
 int main(int argc, char *argv[])
 {
-    auto app = Gtk::Application::create(argc, argv, "org.enricozini.buffy");
-
-    Buffy buffy;
-    return app->run(buffy);
+    Buffy app;
+    return app.run(argc, argv);
 
     // Main main(argc, argv);
     // return main.run_gui();

@@ -11,8 +11,34 @@
 // #include "folders.h"
 // #include "sorterfilter.h"
 
-class Buffy : public Gtk::Window
+class Buffy : public Gtk::Application
 {
+public:
+    buffy::config::Config config;
+    buffy::config::Section prefs;
+    Glib::RefPtr<Gtk::Builder> m_refbuilder;
+
+    Buffy();
+
+protected:
+    void on_startup() override;
+    void on_activate() override;
+
+private:
+    void create_window();
+    void on_window_hide(Gtk::Window* window);
+    void on_action_quit();
+
+    template<typename TYPE>
+    Glib::RefPtr<TYPE> get_ui_component(const char* name);
+};
+
+
+class BuffyWindow : public Gtk::ApplicationWindow
+{
+    Buffy& buffy;
+    Gtk::Box m_box;
+
 #if 0
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -20,11 +46,11 @@ protected:
     void moveEvent(QMoveEvent* event) override;
     void update_column_visibility();
 #endif
-    buffy::config::Config config;
-    buffy::config::Section prefs;
 
     bool on_configure_event(GdkEventConfigure* c);
     void on_show();
+
+    void on_quit();
 
 public:
 #if 0
@@ -35,8 +61,8 @@ public:
 #endif
 
     // explicit Buffy(QApplication& app, Folders& folders, QWidget *parent = 0);
-    Buffy();
-    ~Buffy();
+    BuffyWindow(Buffy& buffy);
+    ~BuffyWindow();
 
 #if 0
     QAction* action_quit();

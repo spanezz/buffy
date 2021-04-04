@@ -7,53 +7,215 @@
 #endif
 
 Buffy::Buffy()
-    : prefs(config.application("buffy"))
+    : Gtk::Application("org.enricozini.buffy"),
+      prefs(config.application("buffy")),
+      m_refbuilder(Gtk::Builder::create())
 {
+    Glib::set_application_name("Buffy");
+
     config.view().addDefault("only_active_inboxes", "false");
+}
+
+template<typename TYPE>
+Glib::RefPtr<TYPE> Buffy::get_ui_component(const char* name)
+{
+    auto object = m_refbuilder->get_object(name);
+    auto gmenu = Glib::RefPtr<TYPE>::cast_dynamic(object);
+    if (gmenu)
+        return gmenu;
+
+    g_warning("UI component %s not found", name);
+    return Glib::RefPtr<TYPE>();
+}
+
+
+void Buffy::on_startup()
+{
+    Gtk::Application::on_startup();
+
+    add_action("quit", sigc::mem_fun(*this, &Buffy::on_action_quit));
+    set_accel_for_action("quit", "<Primary>q");
+
+    Glib::ustring ui_info = R"(
+<interface>
+  <menu id='menubar'>
+    <submenu>
+      <attribute name='label' translatable='yes'>_Buffy</attribute>
+      <section>
+        <item>
+          <attribute name='label' translatable='yes'>_Quit</attribute>
+          <attribute name='action'>app.quit</attribute>
+          <attribute name='accel'>&lt;Primary&gt;q</attribute>
+        </item>
+      </section>
+    </submenu>
+  </menu>
+
+  <menu id='appmenu'>
+    <submenu>
+      <attribute name='label' translatable='yes'>_Buffy</attribute>
+      <section>
+        <item>
+          <attribute name='label' translatable='yes'>_Quit</attribute>
+          <attribute name='action'>app.quit</attribute>
+          <attribute name='accel'>&lt;Primary&gt;q</attribute>
+        </item>
+      </section>
+    </submenu>
+  </menu>
+</interface>)";
+//      <section>
+//        <item>
+//          <attribute name='label' translatable='yes'>_New</attribute>
+//          <attribute name='action'>example.new</attribute>
+//          <attribute name='accel'>&lt;Primary&gt;n</attribute>
+//        </item>
+//        <item>
+//          <attribute name='label' translatable='yes'>_Open</attribute>
+//          <attribute name='action'>example.open</attribute>
+//          <attribute name='accel'>&lt;Primary&gt;o</attribute>
+//        </item>
+//      </section>
+//      <section>
+//        <item>
+//          <attribute name='label' translatable='yes'>Rain</attribute>
+//          <attribute name='action'>example.rain</attribute>
+//        </item>
+//      </section>
+
+//    <submenu>
+//      <attribute name='label' translatable='yes'>_Edit</attribute>
+//      <item>
+//        <attribute name='label' translatable='yes'>_Cut</attribute>
+//        <attribute name='action'>example.cut</attribute>
+//        <attribute name='accel'>&lt;Primary&gt;x</attribute>
+//      </item>
+//      <item>
+//        <attribute name='label' translatable='yes'>_Copy</attribute>
+//        <attribute name='action'>example.copy</attribute>
+//        <attribute name='accel'>&lt;Primary&gt;c</attribute>
+//      </item>
+//      <item>
+//        <attribute name='label' translatable='yes'>_Paste</attribute>
+//        <attribute name='action'>example.paste</attribute>
+//        <attribute name='accel'>&lt;Primary&gt;v</attribute>
+//      </item>
+//    </submenu>
+
+    m_refbuilder->add_from_string(ui_info);
+
+    // Add the menubar
+    auto menubar = get_ui_component<Gio::Menu>("menubar");
+    if (menubar)
+        set_menubar(menubar);
+
+//    auto appmenu = get_ui_component<Gio::Menu>("appmenu");
+//    if (appmenu)
+//        set_app_menu(appmenu);
+}
+
+void Buffy::on_activate()
+{
+    create_window();
+}
+
+void Buffy::create_window()
+{
+    auto win = new BuffyWindow(*this);
+
+    //Make sure that the application runs for as long this window is still open:
+    add_window(*win);
+
+    // Delete the window when it is hidden.
+    // That's enough for this simple example.
+    win->signal_hide().connect(sigc::bind<Gtk::Window*>(
+                sigc::mem_fun(*this, &Buffy::on_window_hide), win));
+
+    win->show_all();
+}
+
+void Buffy::on_window_hide(Gtk::Window* window)
+{
+    delete window;
+}
+
+void Buffy::on_action_quit()
+{
+    quit(); // Not really necessary, when Gtk::Widget::hide() is called.
+
+    // Gio::Application::quit() will make Gio::Application::run() return,
+    // but it's a crude way of ending the program. The window is not removed
+    // from the application. Neither the window's nor the application's
+    // destructors will be called, because there will be remaining reference
+    // counts in both of them. If we want the destructors to be called, we
+    // must remove the window from the application. One way of doing this
+    // is to hide the window.
+    std::vector<Gtk::Window*> windows = get_windows();
+    if (windows.size() > 0)
+        windows[0]->hide(); // In this simple case, we know there is only one window.
+}
+
+
+/*
+ * BuffyWindow
+ */
+
+BuffyWindow::BuffyWindow(Buffy& buffy)
+    : buffy(buffy), m_box(Gtk::ORIENTATION_VERTICAL)
+{
     set_title("Buffy");
 
     int default_w, default_h;
     get_default_size(default_w, default_h);
 
-    prefs.addDefault("winw", std::to_string(default_w));
-    prefs.addDefault("winh", std::to_string(default_h));
+    buffy.prefs.addDefault("winw", std::to_string(default_w));
+    buffy.prefs.addDefault("winh", std::to_string(default_h));
 
-    int saved_w = prefs.getInt("winw");
-    int saved_h = prefs.getInt("winh");
+    int saved_w = buffy.prefs.getInt("winw");
+    int saved_h = buffy.prefs.getInt("winh");
     set_default_size(saved_w, saved_h);
+
+    add(m_box);
+
+
+    show_all_children();
 }
 
-Buffy::~Buffy()
+BuffyWindow::~BuffyWindow()
 {
 }
 
-bool Buffy::on_configure_event(GdkEventConfigure* c)
+bool BuffyWindow::on_configure_event(GdkEventConfigure* c)
 {
     bool res = Gtk::Window::on_configure_event(c);
     int x, y;
     Gtk::Window::get_position(x, y);
 
-    prefs.setInt("winx", x);
-    prefs.setInt("winy", y);
-    prefs.setInt("winw", c->width);
-    prefs.setInt("winh", c->height);
+    buffy.prefs.setInt("winx", x);
+    buffy.prefs.setInt("winy", y);
+    buffy.prefs.setInt("winw", c->width);
+    buffy.prefs.setInt("winh", c->height);
 
     return res;
 }
 
-void Buffy::on_show()
+void BuffyWindow::on_show()
 {
     Gtk::Window::on_show();
 
-    if (prefs.isSet("winx") && prefs.isSet("winy"))
+    if (buffy.prefs.isSet("winx") && buffy.prefs.isSet("winy"))
     {
-        move(prefs.getInt("winx"), prefs.getInt("winy"));
+        move(buffy.prefs.getInt("winx"), buffy.prefs.getInt("winy"));
     }
 
 //    if (folderList.size() == 0)
 //        rescanFolders();
 }
 
+void BuffyWindow::on_quit()
+{
+    hide();
+}
 
 #if 0
 Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
