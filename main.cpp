@@ -1,7 +1,7 @@
 #include <gtkmm.h>
+#include "buffy.h"
 
 #if 0
-#include "buffy.h"
 #include "tray.h"
 #include <QApplication>
 #include <QCommandLineParser>
@@ -55,16 +55,6 @@ struct Main
     }
 };
 #endif
-
-class Buffy : public Gtk::Window
-{
-public:
-    Buffy()
-    {
-        set_title("Buffy");
-        set_default_size(200, 200);
-    }
-};
 
 
 int main(int argc, char *argv[])

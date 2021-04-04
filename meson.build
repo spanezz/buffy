@@ -14,7 +14,7 @@ gtkmm_dep = dependency('gtkmm-3.0')
 subdir('backend')
 
 buffy_sources = [
-#     'buffy.cpp',
+    'buffy.cpp',
 #     'folders.cpp',
 #     'folderview.cpp',
 #     'sorterfilter.cpp',

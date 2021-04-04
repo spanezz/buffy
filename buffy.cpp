@@ -1,11 +1,61 @@
 #include "buffy.h"
+#if 0
 #include "ui_buffy.h"
 #include <QDebug>
 #include <QResizeEvent>
 #include <QMoveEvent>
+#endif
 
-using namespace buffy;
+Buffy::Buffy()
+    : prefs(config.application("buffy"))
+{
+    config.view().addDefault("only_active_inboxes", "false");
+    set_title("Buffy");
 
+    int default_w, default_h;
+    get_default_size(default_w, default_h);
+
+    prefs.addDefault("winw", std::to_string(default_w));
+    prefs.addDefault("winh", std::to_string(default_h));
+
+    int saved_w = prefs.getInt("winw");
+    int saved_h = prefs.getInt("winh");
+    set_default_size(saved_w, saved_h);
+}
+
+Buffy::~Buffy()
+{
+}
+
+bool Buffy::on_configure_event(GdkEventConfigure* c)
+{
+    bool res = Gtk::Window::on_configure_event(c);
+    int x, y;
+    Gtk::Window::get_position(x, y);
+
+    prefs.setInt("winx", x);
+    prefs.setInt("winy", y);
+    prefs.setInt("winw", c->width);
+    prefs.setInt("winh", c->height);
+
+    return res;
+}
+
+void Buffy::on_show()
+{
+    Gtk::Window::on_show();
+
+    if (prefs.isSet("winx") && prefs.isSet("winy"))
+    {
+        move(prefs.getInt("winx"), prefs.getInt("winy"));
+    }
+
+//    if (folderList.size() == 0)
+//        rescanFolders();
+}
+
+
+#if 0
 Buffy::Buffy(QApplication& app, Folders& folders, QWidget *parent) :
     QMainWindow(parent),
     app(app),
@@ -188,3 +238,4 @@ void Buffy::folder_activated(const QModelIndex &idx)
     if (!f) return;
     f->run_email_program();
 }
+#endif
