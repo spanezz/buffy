@@ -37,6 +37,7 @@ void FolderView::contextMenuEvent(QContextMenuEvent *event)
     menu.addAction(new ActiveInboxAction(*f, &menu));
     menu.addAction(new ViewAlwaysAction(*f, &menu));
     menu.addAction(new HideAlwaysAction(*f, &menu));
+    menu.addAction(new Hide24hAction(*f, &menu));
     menu.exec(event->globalPos());
 
     sorted_model->visibility_updated();

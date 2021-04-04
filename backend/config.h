@@ -26,7 +26,7 @@ protected:
     std::string getval(GKeyFile* cfg, const std::string& name) const;
 
 public:
-    bool isSet(const std::string& name);
+    bool isSet(const std::string& name) const;
     void unset(const std::string& name);
 
     bool getBool(const std::string& name) const;
@@ -81,9 +81,11 @@ protected:
 public:
     bool forceview() const;
     bool forcehide() const;
+    time_t hideuntil() const;
 
     void setForceView(bool val);
     void setForceHide(bool val);
+    void setHideUntil(time_t ts);
 
     friend class Config;
 };

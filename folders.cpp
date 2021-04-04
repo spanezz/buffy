@@ -59,6 +59,8 @@ bool Folder::is_visible() const
     if (cfg.getBool("activeinbox")) return true;
     if (cfg.forceview()) return true;
     if (cfg.forcehide()) return false;
+    time_t ts = cfg.hideuntil();
+    if (ts != 0 && time(nullptr) < ts) return false;
     if (folders.config.view().getBool("only_active_inboxes")) return false;
     if (folder->getMsgUnread()) return true;
     // View any folder as long as it has flagged messages

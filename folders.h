@@ -124,6 +124,29 @@ public slots:
     }
 };
 
+struct Hide24hAction : public FolderAction
+{
+    Q_OBJECT
+
+public:
+    Hide24hAction(Folder& folder, QObject *parent)
+        : FolderAction(folder, parent)
+    {
+        setChecked(folder.cfg().forcehide());
+        setText("Hide for 24h");
+        connect(this, SIGNAL(triggered(bool)), this, SLOT(set_value(bool)));
+    }
+
+public slots:
+    void set_value(bool val)
+    {
+        if (val)
+            folder.cfg().setHideUntil(time(nullptr) + 86400);
+        else
+            folder.cfg().setHideUntil(0);
+    }
+};
+
 struct ActiveInboxAction : public FolderAction
 {
     Q_OBJECT

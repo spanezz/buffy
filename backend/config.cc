@@ -24,7 +24,7 @@ namespace config {
 Section::Section(Config& cfg, const std::string& section)
     : cfg(cfg), section(section)  {}
 
-bool Section::isSet(const std::string& name)
+bool Section::isSet(const std::string& name) const
 {
     if (!g_key_file_has_group(cfg.cfg, section.c_str()))
         return false;
@@ -135,6 +135,12 @@ Folder::Folder(Config& cfg, const std::string& section)
 
 bool Folder::forceview() const { return getBool("forceview"); }
 bool Folder::forcehide() const { return getBool("forcehide"); }
+time_t Folder::hideuntil() const
+{
+    if (!isSet("hideuntil"))
+        return 0;
+    return getInt("hideuntil");
+}
 void Folder::setForceView(bool val)
 {
     if (val)
@@ -152,6 +158,13 @@ void Folder::setForceHide(bool val)
         unset("forceview");
     } else
         unset("forcehide");
+}
+void Folder::setHideUntil(time_t ts)
+{
+    if (ts == 0)
+        unset("hideuntil");
+    else
+        setInt("hideuntil", ts);
 }
 
 Location::Location(Config& cfg, const std::string& section)
