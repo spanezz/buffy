@@ -13,18 +13,18 @@ zlib_dep = dependency('zlib')
 subdir('backend')
 
 buffy_sources = [
-	'buffy.cpp',
-	'folders.cpp',
-	'folderview.cpp',
-	'main.cpp',
-	'sorterfilter.cpp',
-	'tray.cpp',
+    'buffy.cpp',
+    'folders.cpp',
+    'folderview.cpp',
+    'main.cpp',
+    'sorterfilter.cpp',
+    'tray.cpp',
 ]
 
 buffy_sources += qt5.preprocess(
-	moc_headers: ['folders.h', 'folderview.h', 'sorterfilter.h', 'tray.h', 'buffy.h'],
-	qresource: ['resources.qrc'],
-	ui_files: ['buffy.ui'],
+    moc_headers: ['folders.h', 'folderview.h', 'sorterfilter.h', 'tray.h', 'buffy.h'],
+    qresource: ['resources.qrc'],
+    ui_files: ['buffy.ui'],
 )
 
 toplevel_inc = include_directories('.')
@@ -34,7 +34,7 @@ executable('buffy', buffy_sources,
        include_directories: toplevel_inc,
        install: true,
        dependencies: [
-	       qt5core_dep, qt5gui_dep, qt5widgets_dep,
+           qt5core_dep, qt5gui_dep, qt5widgets_dep,
        ],
 )
 
