@@ -3,6 +3,7 @@
 #include <QColor>
 #include <QFont>
 #include <QMimeData>
+#include <QProcess>
 #include <QDebug>
 #include <sys/types.h>  // getpwuid, getuid
 #include <unistd.h>     // getuid
@@ -100,6 +101,14 @@ void Folder::run_email_program()
     // I wonder what this does, as it's undocumented
     // Glib::spawn_async(".", argv, Glib::SpawnFlags(0), sigc::mem_fun(*this, &MailProgramImpl::on_exit));
 
+    QStringList args;
+    args << "-c" << QString::fromStdString(cmd);
+
+    QProcess* process = new QProcess(this);
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(on_mua_finished(int, QProcess::ExitStatus)));
+    process->start("/bin/sh", args);
+
+#if 0
     pid_t child = fork();
     if (child == -1)
         throw_system_error("cannot fork child process");
@@ -116,6 +125,12 @@ void Folder::run_email_program()
         }
         _exit(0);
     }
+#endif
+}
+
+void Folder::on_mua_finished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    folders.refresh();
 }
 
 

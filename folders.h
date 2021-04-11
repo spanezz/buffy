@@ -6,6 +6,7 @@
 #include <functional>
 #include <QAbstractTableModel>
 #include <QAction>
+#include <QProcess>
 
 class Folders;
 
@@ -28,6 +29,8 @@ public:
 public slots:
     void set_active_inbox(bool value);
     void run_email_program();
+    void on_mua_finished(int exitCode, QProcess::ExitStatus exitStatus);
+
 };
 
 class Folders: public QAbstractTableModel
