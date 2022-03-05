@@ -73,6 +73,19 @@ bool Folder::is_visible() const
     return false;
 }
 
+std::string Folder::name() const
+{
+    std::string name = folder->name();
+    if (name.substr(0, 7) == "Maildir")
+    {
+        if (name.size() == 7)
+            return "#INBOX";
+        else
+            return name.substr(7);
+    } else
+        return name;
+}
+
 void Folder::set_active_inbox(bool value)
 {
     cfg().setBool("activeinbox", value);
@@ -222,7 +235,7 @@ QVariant Folders::data(const QModelIndex &index, int role) const
         const Folder& f = *all[index.row()];
         switch (ctype)
         {
-        case CT_NAME: return QVariant(f.folder->name().c_str());
+        case CT_NAME: return QVariant(f.name().c_str());
         case CT_NEW: return QVariant(f.folder->getMsgNew());
         case CT_UNREAD: return QVariant(f.folder->getMsgUnread());
         case CT_TOTAL: return QVariant(f.folder->getMsgTotal());
@@ -331,14 +344,6 @@ Folder* Folders::valueAt(const QModelIndex &index)
     if (!index.isValid()) return NULL;
     if ((unsigned)index.row() >= all.size()) return NULL;
     return all[index.row()];
-}
-
-Folder *Folders::by_name(const std::string &name)
-{
-    for (auto f: all)
-        if (f->folder->name() == name)
-            return f;
-    return 0;
 }
 
 void Folders::each_active_inbox(std::function<void (Folder &)> func)

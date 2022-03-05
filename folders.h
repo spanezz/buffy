@@ -25,6 +25,7 @@ public:
     buffy::config::Folder cfg();
     buffy::config::Folder cfg() const;
     bool is_visible() const;
+    std::string name() const;
 
 public slots:
     void set_active_inbox(bool value);
@@ -51,7 +52,6 @@ public:
     void set_visibility(bool view_all, bool view_all_nonempty, bool view_all_flagged, bool view_only_active_inboxes);
 
     Folder* valueAt(const QModelIndex& index);
-    Folder* by_name(const std::string& name);
     void each_active_inbox(std::function<void(Folder&)> func);
 
     int rowCount(const QModelIndex &parent) const override;
